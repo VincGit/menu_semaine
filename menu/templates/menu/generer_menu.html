@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block title %}Mon menu de la semaine{% endblock %}
+{% block contenu %}
+{%if formset%}
+	<h2>Semaine {{repas_semaine.numero_semaine}}</h2>
+	
+{% comment %}	
+<form action="{% url "menu.views.generer_menu" %}" method="post">
+    {% csrf_token %}
+    {{formset.management_form }}
+		{% for form in formset%}
+		<ul>
+			{{ form.as_ul}}
+		</ul>
+		{% endfor %}
+    <input type="submit" value="Valider et continuer" />
+</form>
+	{% endcomment %}
+	
+{% comment %}
+	<form action="{% url "menu.views.generer_menu" %}"  method="post">
+		{% csrf_token %}
+		{% for form in formset%}
+		<ul>
+			{{ form.as_ul}}
+		</ul>
+		{% endfor %}
+		<input type="submit" value="Valider" />
+	</form>
+		{% endcomment %}
+
+	<form method="post">
+		{% csrf_token %}
+		{{formset.management_form }}
+		{% for form in formset%}
+			{{ form.id }}
+			<p>
+			<h2>{{ form.instance.nom }}</h2>
+			Saison : {{ form.saison }}
+			Categorie : {{ form.categorie }}
+			<br/>
+			{{form.instance.id}}
+			{%if form.instance.recette %}
+				{{ form.instance.recette.nom }}
+			{%else%}
+				Pas de suggestion trouvee
+			{%endif%}
+			<button formaction="{% url "menu.views.menu_modifier" form.instance.id %}">Propose autre chose</button>
+			</p>
+		{% endfor %}
+		<button formaction="{% url "menu.views.generer_menu" %}">Valider</button>
+	</form>
+
+	{% comment %}
+	<form method="post">
+		{% csrf_token %}
+		{% for form in formset%}
+		{{ form.id }}
+		<p>			
+			{{ form.instance.nom }}
+			<span class=option_menu>
+				{{ form.saison }}
+				{{ form.categorie }}
+			</span>
+			<br/>			
+			{%if form.instance.recette %}
+				{{ form.instance.recette.nom }}
+			{%else%}
+				Pas de suggestion trouvee
+			{%endif%}
+			<button formaction="{% url "menu.views.menu_modifier" form.instance.id %}">Propose autre chose</button>
+		</p>
+		{% endfor %}
+		<input type="submit" value="Valider" />
+	</form>
+   {% endcomment %}
+
+
+{% comment %}
+        {% for repas in repas_semaine.repas_set.all %}
+            <div class="article">
+                <h3>{{ repas.nom }} : </h3>
+                {%if repas.recette%}
+                    <a href="{% url "menu.views.voir_detail" repas.recette.id %}">{{repas.recette.nom|default_if_none:"Pas de suggestion trouvee"}}</a>
+                {%else%}
+                    {%if repas.recette_libre%}
+                        <form>
+                            <p>
+                                <input type="text" name="repas" id="repas" placeholder="votre choix" size="70" maxlength="10" />
+                            </p>
+                        </form>
+                    {%else%}
+                        Pas de suggestion trouvee
+                    {%endif%}
+                {%endif%}
+                 <a href="{% url "menu.views.menu_modifier" repas.id %}" class="button">Proposer autre chose</a>
+            </div>
+        {% empty %}
+            <p>Aucun article.</p>
+        {% endfor %}
+
+    {% endcomment %}
+
+    {%else%}
+
+        <h2>Menu de la semaine {{repas_semaine.numero_semaine}}</h2>
+        <a href="{% url "menu.views.reediter_menu_semaine" %}" class="button">Modifier la semaine</a>
+        {% for repas in repas_semaine.repas_set.all %}
+        <div class="article">
+            <h3>{{ repas.nom }} </h3>
+            {%if repas.recette%}
+                <a href="{% url "menu.views.voir_detail" repas.recette.id %}">{{repas.recette.nom|default_if_none:"Pas de suggestion trouvee"}}</a>
+            {%else%}
+                {%if repas.recette_libre%}
+                    <form>
+                        <p>
+                            <input type="text" name="repas" id="repas" placeholder="votre choix" size="70" maxlength="10" />
+                        </p>
+                    </form>
+                {%else%}
+                    Pas de suggestion trouvee
+                {%endif%}
+            {%endif%}
+        </div>
+        {% empty %}
+            <p>Aucun article.</p>
+        {% endfor %}
+    {%endif%}
+
+
+
+{% endblock %}

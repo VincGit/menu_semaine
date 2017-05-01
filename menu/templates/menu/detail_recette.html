@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Detail de la recette {{recette.nom }}{% endblock %}
+{% block contenu %}
+    <div>
+        <a href="{% url "menu.views.editer_recette" id %}">Editer la recette</a>
+        <h2>{{ recette.nom }}</h2>
+        <p>Categorie :
+        {% for categorie in categories %}
+            {{ categorie.nom }}
+        {% endfor %}
+        </p>
+        <p>Saison :
+			{% for saison in saisons %}
+            {{ saison.nom }}
+            {% endfor %}
+        </p>
+        <h3>Recette</h3>
+        <p>{{recette.recette|linebreaks }}</p>
+        <h3>Commentaires</h3>
+        <p>{{ recette.commentaire|linebreaks }}</p>
+        {% if recette.lien %}
+        <a href={{ recette.lien }}>Recette en ligne</a>
+        {%endif%}
+    </div>
+
+    <div>
+        <h3>Ingredients</h3>
+        <p>
+        {% for ingredient in ingredients %}
+            {{ ingredient.nom}} </p>
+        {% endfor %}
+        </p>
+    </div>
+{% endblock %}

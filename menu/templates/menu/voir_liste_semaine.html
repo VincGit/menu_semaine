@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}La liste des semaines remplies{% endblock %}
+{% block contenu %}
+    <h2>Cliquer pour voir/modifier une semaine</h2>
+    {% for semaine in liste_semaine %}
+        <p><a href="{% url "menu.views.voir_semaine" semaine.id %}">Semaine {{ semaine.numero_semaine }}</a>
+        </p>
+    {% endfor %}
+{% endblock %}

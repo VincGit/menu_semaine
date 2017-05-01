@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Enfin un vendredi soir devant la tele{% endblock %}
+{% block contenu %}
+    <p><a href="{% url "menu.views.generer_semaine"%}">Generer une nouvelle semaine</a> </p>
+    <p><a href="{% url "menu.views.liste_semaines_precedentes"%}">Voir les semaines precedentes</a></p>
+{% endblock %}

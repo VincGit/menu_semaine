@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}La liste des recettes{% endblock %}
+{% block contenu %}
+    <h2Toutes les recettes</h2>
+
+
+    {% for recette in liste_recette %}
+        <p>{{ recette.nom }} : <a href="{% url "menu.views.voir_detail" recette.id %}">Voir le detail</a>
+        </p>
+    {% endfor %}
+{% endblock %}

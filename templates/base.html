@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+   <title>{% block title %}Mon generateur de menus{% endblock %}</title>
+</head>
+
+
+
+<div id="entete">
+{% block entete %}
+	<h1>
+		Mon menu de la semaine
+	</h1>
+	<h2>
+		Enfin un vendredi soir devant la tele
+	</h2>
+{% endblock %}
+</div>
+
+<div id="centre">
+	<div id="navigation">
+		<ul>
+			<li><a href="{% url "menu.views.accueil" %}">Accueil</a></li>
+			<li><a href="{% url "menu.views.generer_semaine"%}">Generer un nouveau menu</a></li>
+			<li><a href="{% url "menu.views.liste_semaines_precedentes"%}">Voir les semaines precedentes</a></li>
+			<li><a href="{% url "menu.views.liste_recette"%}">Voir la liste des recettes</a></li>
+			<li><a href="{% url "menu.views.recette_aleatoire"%}">Une recette au hasard</a></li>
+			<li><a href="{% url "menu.views.entrer_recette"%}">Entrer une nouvelle recette</a></li>
+		</ul>
+	</div>
+
+	<div id="contenu">
+		{% if messages %}
+		<p>messages</p>
+		<ul class="messages">
+			{% for message in messages %}
+			<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+	{% block contenu %}
+
+	{% endblock %}</div>
+	</div><!-- #centre -->
+
+    <div id="pied">
+        <p>Le contenu de mon pied de page. </p>
+    </div><!-- #pied -->
+    <footer>Mon menu</footer>
+
+</div><!-- #global -->
+
+</body></html>

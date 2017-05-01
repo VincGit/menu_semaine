@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Editer la semaine{% endblock %}
+{% block contenu %}
+<form action="{% url "menu.views.editer_profil_semaine" %}" method="post">
+    {% csrf_token %}
+    <ul>
+    {{ formset.as_ul}}
+    </ul>
+    <input type="submit" value="Valider et continuer" />
+</form>
+{% endblock %}
