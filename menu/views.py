@@ -27,47 +27,55 @@ def editer_recette(request, id):
 def generer_semaine(request):
     if request.method == 'POST':
         semaine_id = request.session.get('semaine_id')
-        if semaine_id:
+        if 'submit' in request.POST:
+            if semaine_id:
+                semaine = models.SemaineRempli.objects.get(id=semaine_id)
+                # On modifie la semaine avec les donnees recuperees
+                form = forms.SemaineRempli(request.POST, instance=semaine)
+                if form.is_valid():
+                    # numero_semaine = form.cleaned_data['numero_semaine']
+                    # print(numero_semaine)
+                    # if verifier_semaine_duplique(request, numero_semaine):
+                    # return render(request, 'menu/generer_nouvelle_semaine.html',
+                    # {"form_semaine": form})
+                    form.save()
+                    # on recupere une reference de repas (ete, automne, ...)
+                    # et on creer un repas en fonction de ca
+                    # TODO
+                    print(form.cleaned_data['profil'])
+                    reference_saison = models.ReferenceSaison.objects.filter(nom=
+                                                                             form.cleaned_data['profil'])
+                    liste_reference_repas = models.ReferenceRepas.objects.filter(
+                        profil=reference_saison)
+
+                    # TO DO ; gerer le profil precedent
+
+                    # Pour chaque repas de reference, on cree une instance de repas
+                    # en copiant les parametres de la reference
+                    # on l'associe a la semaine en cours de creation
+                    for reference_repas in liste_reference_repas:
+                        repas = models.Repas(nom=reference_repas.nom,
+                                             ordre=reference_repas.ordre,
+                                             actif=reference_repas.actif,
+                                             libre_choix=reference_repas.libre_choix,
+                                             invite=reference_repas.invite,
+                                             semaine=semaine)
+                        repas.save()
+                        repas.saison = reference_repas.saison.all()
+                        repas.categorie = reference_repas.categorie.all()
+                        repas.save()
+                    return redirect('editer_profil_semaine')
+                else:
+                    return render(request, 'menu/generer_nouvelle_semaine.html',
+                                  {"form_semaine": form})
+        else:
+            #it means the user want to cancel the week menu creation
+            #we delete the week
+            print("The week will be deleted")
             semaine = models.SemaineRempli.objects.get(id=semaine_id)
-            # On modifie la semaine avec les donnees recuperees
-            form = forms.SemaineRempli(request.POST, instance=semaine)
-            if form.is_valid():
-                # numero_semaine = form.cleaned_data['numero_semaine']
-                # print(numero_semaine)
-                # if verifier_semaine_duplique(request, numero_semaine):
-                # return render(request, 'menu/generer_nouvelle_semaine.html',
-                # {"form_semaine": form})
-                # if form.is_valid():
-                form.save()
-                # on recupere une reference de repas (ete, automne, ...)
-                # et on creer un repas en fonction de ca
-                # TODO
-                print(form.cleaned_data['profil'])
-                reference_saison = models.ReferenceSaison.objects.filter(nom=
-                                                                         form.cleaned_data['profil'])
-                liste_reference_repas = models.ReferenceRepas.objects.filter(
-                    profil=reference_saison)
+            semaine.delete()
+            return render(request, 'menu/accueil.html')
 
-                # TO DO ; gerer le profil precedent
-
-                # Pour chaque repas de reference, on cree une instance de repas
-                # en copiant les parametres de la reference
-                # on l'associe a la semaine en cours de creation
-                for reference_repas in liste_reference_repas:
-                    repas = models.Repas(nom=reference_repas.nom,
-                                         ordre=reference_repas.ordre,
-                                         actif=reference_repas.actif,
-                                         libre_choix=reference_repas.libre_choix,
-                                         invite=reference_repas.invite,
-                                         semaine=semaine)
-                    repas.save()
-                    repas.saison = reference_repas.saison.all()
-                    repas.categorie = reference_repas.categorie.all()
-                    repas.save()
-                return redirect('editer_profil_semaine')
-            else:
-                return render(request, 'menu/generer_nouvelle_semaine.html',
-                              {"form_semaine": form})
     else:
         semaine = models.SemaineRempli()
         semaine.save()
@@ -118,7 +126,6 @@ def generer_menu(request):
         formset = repas_form_set(request.POST, queryset=semaine.repas_set.all().order_by('ordre'))
 
         if formset.is_valid():
-            formset.save()
             return render(request, 'menu/generer_menu.html', {'repas_semaine': semaine})
         else:
             print("forme pas valide")
@@ -132,6 +139,7 @@ def generer_menu(request):
             recettes = trouver_recette(repas)
             if recettes:
                 repas.recette = random.choice(recettes)
+                print("Repas id = {}".format(repas.id))
             else:
                 print('pas de recette trouve')
                 pass
@@ -141,6 +149,18 @@ def generer_menu(request):
         formset = repas_form_set(queryset=semaine.repas_set.all().order_by('ordre'))
         return render(request, 'menu/generer_menu.html', {'repas_semaine': semaine, 'formset': formset})
 
+
+def reediter_menu_semaine(request):
+    print('reediter_menu_semaine')
+    semaine_id = request.session.get('semaine_id')
+    semaine = models.SemaineRempli.objects.get(id=semaine_id)
+    # On cree un formset avec sur le model Repas
+    repas_form_set = modelformset_factory(models.Repas, fields=('saison', 'categorie', 'recette'),
+                                          widgets={'categorie': forms.forms.CheckboxSelectMultiple(),
+                                                   'saison': forms.forms.CheckboxSelectMultiple()}, extra=0)
+
+    formset = repas_form_set(queryset=semaine.repas_set.all().order_by('ordre'))
+    return render(request, 'menu/generer_menu.html', {'repas_semaine': semaine, 'formset': formset})
 
 def menu_modifier(request, form_id):
     print('menu_modifier')
@@ -155,24 +175,28 @@ def menu_modifier(request, form_id):
         # On modifie la semaine avec les donnees recuperees
         formset = repas_form_set(request.POST, queryset=semaine.repas_set.all().order_by('ordre'))
 
-        print("formset")
-        print(dir(formset))
-        #print(formset.queyset())
-        print("formset.data")
+        print("request.POST")
+        print(request.POST)
+
+        print("formset.get_queryset()")
         print(formset.get_queryset())
 
         if formset.is_valid():
             formset.save()
-            # on recupere le repas a changer
+            print("formset.get_queryset() after save")
+            print(formset.get_queryset())
+            #on recupere le repas a changer
             repas = semaine.repas_set.get(id=form_id)
-            print(repas)
+
+            # we get an associated list of matching receipts
             recettes = trouver_recette(repas)
-            print(recettes)
-            # si le plat est trouve, on en choisit un au hasard
+            # if receipts are found we chose one
             if recettes:
                 repas.recette = random.choice(recettes)
             else:
                 repas.recette = None
+            print("nouveau repas")
+            print(repas)
             repas.save()
             formset = repas_form_set(queryset=semaine.repas_set.all().order_by('ordre'))
             return render(request, 'menu/generer_menu.html', {'repas_semaine': semaine, 'formset': formset})
@@ -182,8 +206,6 @@ def menu_modifier(request, form_id):
             return render(request, 'menu/generer_menu.html',  {'repas_semaine': semaine, 'formset': formset})
     else:
         print("On ne devrait pas etre ici")
-
-
 
 def entrer_recette(request):
     if request.method == 'POST':  # S'il s'agit d'une requête POST
@@ -251,14 +273,6 @@ def voir_semaine(request, semaine_id):
         return render(request, 'menu/generer_menu.html')
 
 
-def reediter_menu_semaine(request):
-    semaine_id = request.session.get('semaine_id')
-    semaine = models.SemaineRempli.objects.get(id=semaine_id)
-    form = forms.SemaineRempli(instance=semaine)
-    return render(request, 'menu/generer_menu.html',
-                  {'repas_semaine': semaine, 'form': form})
-
-
 def trouver_recette(repas):
     query_object = Q()
     requete_trouve = False
@@ -273,9 +287,9 @@ def trouver_recette(repas):
         nom_saison = [saison.nom for saison in repas.saison.all()]
         nom_categorie = [categorie.nom for categorie
                          in repas.categorie.all()]
-        if "Indifferent" in nom_saison:
+        if "Indifférent" in nom_saison:
             print("saison indifferent")
-            if "Indifferent" in nom_categorie:
+            if "Indifférent" in nom_categorie:
                 print("et cat indifferente")
                 requete_trouve = True
                 # pas de critere donc la query est vide
@@ -284,24 +298,24 @@ def trouver_recette(repas):
                 requete_trouve = True
                 requete_vide = False
                 query_object = Q(categorie__in=repas.categorie.all()) | \
-                               Q(categorie__nom="Indifferent")
+                               Q(categorie__nom="Indifférent")
 
         if not requete_trouve:
-            if "Indifferent" in nom_categorie:
+            if "Indifférent" in nom_categorie:
                 print("cat indifferente")
                 requete_trouve = True
                 requete_vide = False
                 query_object = Q(saison__in=repas.saison.all()) | \
-                               Q(saison__nom="Indifferent")
+                               Q(saison__nom="Indifférent")
             else:
                 print("tout compte")
                 requete_trouve = True
                 requete_vide = False
                 query_object = Q(categorie__in=repas.categorie.all()) | \
-                               Q(categorie__nom="Indifferent")
+                               Q(categorie__nom="Indifférent")
 
                 query_object.add(Q(saison__in=repas.saison.all()) |
-                                 Q(saison__nom="Indifferent"), Q.AND)
+                                 Q(saison__nom="Indifférent"), Q.AND)
         # enfin, on regarde s'il y a des invites
         if repas.invite:
             print("repas invite")

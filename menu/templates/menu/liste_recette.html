@@ -5,7 +5,8 @@
 
 
     {% for recette in liste_recette %}
-        <p>{{ recette.nom }} : <a href="{% url "menu.views.voir_detail" recette.id %}">Voir le detail</a>
-        </p>
+    <p>
+    <a href="{% url "menu.views.voir_detail" recette.id %}">{{ recette.nom }}</a>
+    </p>
     {% endfor %}
 {% endblock %}

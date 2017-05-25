@@ -3,8 +3,8 @@
 {% block contenu %}
     <div class="article">
     <h2>{{ recette.nom }}
-    (categorie : {{ recette.categorie.nom }} / saison : {{recette.saison.nom}})</h2>
-    <p>Recette entree le {{ recette.date|date:"DATE_FORMAT" }}</p>
+    (catégorie : {{ recette.categorie.nom }} / saison : {{recette.saison.nom}})</h2>
+    <p>Recette entrée le {{ recette.date|date:"DATE_FORMAT" }}</p>
     <h3>Recette</h3>
     <p>{{ recette.recette|linebreaks }}</p>
     <h3>Commentaires</h3>

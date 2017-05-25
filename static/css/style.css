@@ -16,8 +16,8 @@
 
 /* Général */
 body {
-    color: #F0E39E;
-    background: #0C2F22;
+    color: #000000;
+    background: #E4F0EE;
 }
 
 a.button {
@@ -43,28 +43,23 @@ strong {
     color: #A1B55D;
 }
 
-/* Bloc central contenant #navigation et #contenu
-#centre {
-    background: url(img/07-colonnes.png) repeat-y; /* Voir -> Note 1 */
-}
-
 
 */
 /* Navigation */
 #navigation {
-    background: #181A12; /* -> 2 */
+    background: #000000; /* -> 2 */
 }
 #navigation a {
-    color: #FF6533;
+    color: #000000;
 }
 #navigation a:hover, #navigation a:focus {
-    background: #000000;
+    background: #00FFFF;
 }
 
 /* Contenu principal */
 #contenu {
     color: #163B29;
-    background: #cbd555; /* -> 2 */
+    background: #BBBBBB; /* -> 2 */
 }
 #contenu a {
     color: #332510;

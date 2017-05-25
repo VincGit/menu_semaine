@@ -6,7 +6,7 @@ from .models import *
 class RecetteForm(forms.ModelForm):
     class Meta:
         model = Recette
-        fields = ('nom', 'recette', 'commentaire', 'lien', 'categorie', 'saison', 'ingredients', 'OK_invites')
+        fields = ('nom', 'ingredients', 'saison', 'categorie', 'recette', 'commentaire', 'lien', 'OK_invites')
 
 
 class RepasForm(forms.ModelForm):

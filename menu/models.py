@@ -28,11 +28,11 @@ class Recette(models.Model):
     recette = models.TextField(null=True, blank=True)
     lien = models.URLField(null=True, blank=True)
     commentaire = models.TextField(null=True, blank=True)
-    categorie = models.ManyToManyField('Categorie')
+    categorie = models.ManyToManyField('Categorie', verbose_name="Catégorie")
     saison = models.ManyToManyField('Saison')
-    OK_invites = models.BooleanField(default=False)
-    ingredients = models.ManyToManyField('Ingredient', blank=True)
-    date = models.DateTimeField(auto_now_add=True, auto_now=False, verbose_name="Date de creation")
+    OK_invites = models.BooleanField(default=False, verbose_name="OK invités")
+    ingredients = models.ManyToManyField('Ingredient', blank=True, verbose_name="Ingrédients")
+    date = models.DateTimeField(auto_now_add=True, auto_now=False, verbose_name="Date de création")
 
     def __str__(self):
         return self.nom + self.recette
