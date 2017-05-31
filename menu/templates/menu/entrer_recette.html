@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Entrer une nouvelle recette{% endblock %}
 {% block contenu %}
-<form action="{% url "menu.views.entrer_recette" %}" method="post">
+<form action="{% url "entrer_recette" %}" method="post">
     {% csrf_token %}
     <table>
     {{ form.as_table}}

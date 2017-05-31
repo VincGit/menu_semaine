@@ -2,7 +2,7 @@
 {% block title %}Détail de la recette {{recette.nom }}{% endblock %}
 {% block contenu %}
     <div>
-        <a href="{% url "menu.views.editer_recette" id %}">Editer la recette</a>
+        <a href="{% url "editer_recette" id %}">Editer la recette</a>
         <h2>{{ recette.nom }}</h2>
         <p>Catégorie :
         {% for categorie in categories %}
