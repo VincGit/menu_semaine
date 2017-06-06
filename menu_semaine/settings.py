@@ -13,13 +13,15 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 from . import production_credentials
-
-if os.environ["ENV"] == "local":
-    prod = False
-    print("Local dev")
-else:
+try:
+    if os.environ["ENV"] == "local":
+        prod = False
+        print("Local dev")
+    else:
+        prod = True
+        print("Production phase")
+except:
     prod = True
-    print("Production phase")
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
