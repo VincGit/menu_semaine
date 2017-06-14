@@ -17,7 +17,7 @@
 /* Général */
 body {
     color: #000000;
-    background: #E4F0EE;
+    background: #FFFFFF;
 }
 
 a.button {
@@ -33,21 +33,10 @@ a.button {
 	margin-left: 400px;
 }
 
-a {
-    color: #FF6533;
-}
-a:hover, a:focus {
-    color: #FF4C00;
-}
-strong {
-    color: #A1B55D;
-}
-
-
 */
 /* Navigation */
 #navigation {
-    background: #000000; /* -> 2 */
+    background: #000000;
 }
 #navigation a {
     color: #000000;
@@ -57,19 +46,21 @@ strong {
 }
 
 /* Contenu principal */
-#contenu {
+.contenu {
     color: #163B29;
     background: #BBBBBB; /* -> 2 */
 }
-#contenu a {
+.contenu a {
     color: #332510;
 }
-#contenu a:hover, #contenu a:focus {
+.contenu a:hover, #contenu a:focus {
     color: #6E5122;
 }
-#contenu strong {
+.contenu strong {
     color: #181A12;
 }
+
+
 
 
 /* --- POSITIONNEMENT --- */
@@ -77,37 +68,30 @@ strong {
 /* Page */
 body {
     padding: 10px 5px;
-}
-#global {
-    width: 750px; /* -> 3 */
-    margin: 0 auto; /* -> 4 */
+    margin: 50px;
+    background: #FFFFFF;
 }
 
 /* En-tête */
 #entete {
     padding: 20px 20px 20px 0;
-}
-#entete h1 {
-    margin: 0;
-}
-#entete h1 img {
-    float: left;
-    margin: 7px 20px 10px 0;
-}
-#entete .sous-titre {
-    margin: 4px 0 15px 0;
+    width: 550px; /* -> 3 */
+    margin: auto;
 }
 
 /* Bloc central contenant #navigation et #contenu */
 #centre {
-    width: 100%; /* -> 5 */
     overflow: hidden; /* -> 5 */
+    background: #E4F0EE;
+    width: 1100px;
+    margin: auto;
 }
 
 /* Menu de navigation */
 #navigation {
     width: 180px;
     float: left; /* -> 6 */
+    background: #E4F0EE;
 }
 #navigation ul {
     margin: 0;
@@ -124,17 +108,39 @@ body {
 }
 
 /* Contenu */
-#contenu {
+.contenu {
     margin-left: 200px; /* -> 8 */
     margin-right: 200px; /* -> 8 */
     padding: 10px 20px;
+    background: #E4F0EE;
 }
 
-#contenu > :first-child {
+.contenu > :first-child {
     margin-top: 10px;
 }
-#contenu p, #contenu li {
+.contenu p, .contenu li {
     line-height: 1.5;
+}
+
+
+.contenu #centrer{
+    width: 250px;
+    margin: auto;
+}
+
+.contenu #centrertableau{
+    width: 850px;
+    margin: auto;
+}
+
+table
+{
+    border-collapse: collapse;
+}
+td, th /* Mettre une bordure sur les td ET les th */
+{
+    margin: auto;
+    text-align:center;
 }
 
 ul {

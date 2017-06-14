@@ -1,6 +1,10 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Enfin un vendredi soir devant la télé{% endblock %}
+
 {% block contenu %}
-    <p><a href="{% url "generer_semaine"%}">Générer un nouveau menu</a> </p>
-    <p><a href="{% url "liste_semaines_precedentes"%}">Voir les semaines précédentes</a></p>
+    <div id="centrertableau">
+    <img id="centrertableau"src="{% static 'img/accueil.jpg' %}" alt="Photo de montagne" />
+    </div>
 {% endblock %}
+

@@ -3,9 +3,33 @@
 {% block contenu %}
 <form action="{% url "editer_profil_semaine" %}" method="post">
     {% csrf_token %}
-    <ul>
-    {{ formset.as_ul}}
-    </ul>
-    <input type="submit" value="Valider et continuer" />
+    {{ formset.management_form }}
+    <table id="centrertableau">
+    <caption>Edition du profil de la semaine</caption>
+    <tr>
+        <th>Repas</th>
+        <th>Actif ?</th>
+        <th>Choix libre ?</th>
+        <th>Des invites ?</th>
+        <th>Saison</th>
+        <th>Categorie</th>
+    </tr>
+    {% for form in formset%}
+    <tr>
+        {{ form.id }}
+        {{form.nom.as_hidden}}
+        <td>{{form.instance.nom}}</td>
+        <td>{{form.actif}}</td>
+        <td>{{form.libre_choix}}</td>
+        <td>{{form.invite}}</td>
+        <td>{{form.saison}}</td>
+        <td>{{form.categorie}}</td>
+    </tr>
+    {% endfor %}
+    </table>
+    </p>
+    <p id="centrer">
+    <input type="submit" value="Valider" />
+    </p>
 </form>
 {% endblock %}
