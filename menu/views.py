@@ -136,7 +136,7 @@ def generer_menu(request):
         repass = semaine.repas_set.all()
         for repas in repass:
             # on va ensuite trouver un recette associee
-            recettes = trouver_recette(repas)
+            recettes = trouver_recette_de_repas(repas)
             if recettes:
                 repas.recette = random.choice(recettes)
                 print("Repas id = {}".format(repas.id))
