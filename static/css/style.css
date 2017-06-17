@@ -109,8 +109,8 @@ body {
 
 /* Contenu */
 .contenu {
-    margin-left: 200px; /* -> 8 */
-    margin-right: 200px; /* -> 8 */
+    margin-left: 10px; /* -> 8 */
+    margin-right: 10px; /* -> 8 */
     padding: 10px 20px;
     background: #E4F0EE;
 }

@@ -28,3 +28,9 @@ class SemaineRempli(forms.ModelForm):
     class Meta:
         model = SemaineRempli
         fields = ('numero_semaine', 'profil')
+
+
+class SelectionRecetteForm(forms.ModelForm):
+    class Meta:
+        model = SelectionRecette
+        fields = '__all__'

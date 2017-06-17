@@ -1,10 +1,17 @@
 {% extends "base.html" %}
 {% block title %}La liste des recettes{% endblock %}
 {% block contenu %}
-    <h2Toutes les recettes</h2>
 
+    <form action="{% url "liste_recette" %}" method="post">
+    {% csrf_token %}
+    {{ selection_form.as_ul }}
+    <input type="submit" value="Rechercher" />
+    </form>
 
-    {% for recette in liste_recette %}
+    </br>
+    </br>
+
+    {% for recette in recettes %}
     <p>
     <a href="{% url "voir_detail" recette.id %}">{{ recette.nom }}</a>
     </p>

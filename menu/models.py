@@ -38,6 +38,13 @@ class Recette(models.Model):
         return self.nom + self.recette
 
 
+class SelectionRecette(models.Model):
+    categories = models.ManyToManyField('Categorie', verbose_name="Catégories", blank=True)
+    saisons = models.ManyToManyField('Saison', blank=True, verbose_name="Saisons")
+    ingredients = models.ManyToManyField('Ingredient', blank=True, verbose_name="Ingrédients")
+    invite_present = models.BooleanField(default=False, verbose_name="Invite_present")
+
+
 class ReferenceSaison(models.Model):
     """Cette classe permet de stocker les profils de saison
     Printemps, Ete, Autonme, Hiver, Precedent"""

@@ -162,6 +162,7 @@ def reediter_menu_semaine(request):
     formset = repas_form_set(queryset=semaine.repas_set.all().order_by('ordre'))
     return render(request, 'menu/generer_menu.html', {'repas_semaine': semaine, 'formset': formset})
 
+
 def menu_modifier(request, form_id):
     print('menu_modifier')
     semaine_id = request.session.get('semaine_id')
@@ -189,7 +190,7 @@ def menu_modifier(request, form_id):
             repas = semaine.repas_set.get(id=form_id)
 
             # we get an associated list of matching receipts
-            recettes = trouver_recette(repas)
+            recettes = trouver_recette_de_repas(repas)
             # if receipts are found we chose one
             if recettes:
                 repas.recette = random.choice(recettes)
@@ -206,6 +207,7 @@ def menu_modifier(request, form_id):
             return render(request, 'menu/generer_menu.html',  {'repas_semaine': semaine, 'formset': formset})
     else:
         print("On ne devrait pas etre ici")
+
 
 def entrer_recette(request):
     if request.method == 'POST':  # S'il s'agit d'une requête POST
@@ -236,9 +238,81 @@ def verifier_semaine_duplique(request, numero_semaine):
 
 
 def liste_recette(request):
-    liste_recette = models.Recette.objects.all()
-    return render(request, 'menu/liste_recette.html', {'liste_recette':
-                                                           liste_recette})
+    recettes = []
+    if request.method == 'POST':
+        form = forms.SelectionRecetteForm(request.POST)
+        if form.is_valid():
+            recettes = selectionner_recette(form)
+            print("recettes", recettes)
+        else:
+            print("form for liste_recette is not valid")
+    else:
+        form = forms.SelectionRecetteForm()
+
+    return render(request, 'menu/liste_recette.html', {'recettes': recettes, 'selection_form': form})
+
+def selectionner_recette(selection_form):
+    query_object = Q()
+    requete_trouve = False
+    requete_vide = True
+
+    # on recupere le nom des saisons et des categories dans des
+    # listes locales
+    categories = [categorie.nom for categorie in selection_form.cleaned_data['categories']]
+    saisons = [saison.nom for saison in selection_form.cleaned_data['saisons']]
+    ingredients = [ingredient.nom for ingredient in selection_form.cleaned_data['ingredients']]
+    invite_present = selection_form.cleaned_data['invite_present']
+
+    print("categorie: ", categories)
+    print("saisons: ", saisons)
+    print("ingredients: ", ingredients)
+    print("invite: ", invite_present)
+
+    if not saisons or "Indifférent" in saisons:
+        print("saison indifferente")
+        if not categories or "Indifférent" in categories:
+            print("et cat indifferente")
+            requete_trouve = True
+            # pas de critere donc la query est vide
+        else:
+            print("mais pas cat indifferente")
+            requete_trouve = True
+            requete_vide = False
+            query_object = Q(categorie__in=selection_form.cleaned_data['categories']) | Q(categorie__nom="Indifférent")
+
+    if not requete_trouve:
+        if not categories or "Indifférent" in categories:
+            print("cat indifferente")
+            requete_trouve = True
+            requete_vide = False
+            query_object = Q(saison__in=selection_form.cleaned_data['saisons']) | Q(saison__nom="Indifférent")
+        else:
+            print("tout compte")
+            requete_trouve = True
+            requete_vide = False
+            query_object = Q(categorie__in=selection_form.cleaned_data['categories']) | Q(categorie__nom="Indifférent")
+            query_object.add(Q(saison__in=selection_form.cleaned_data['saisons']) | Q(saison__nom="Indifférent"), Q.AND)
+    # On regarde ensuite s'il y a des invites
+    if invite_present:
+        print("repas invite")
+        requete_vide = False
+        query_object.add(Q(OK_invites=True), Q.AND)
+
+    # On regarde enfin si des ingredients sont specifies
+    if ingredients:
+        print("Il y a des ingredients specifies")
+        requete_vide = False
+        query_object.add(Q(ingredients__in=selection_form.cleaned_data['ingredients']), Q.AND)
+
+    # ici le query_object est pret, on fait donc la query a la base
+    if not requete_vide:
+        print("ici")
+        print(query_object)
+        recettes = models.Recette.objects.filter(query_object)
+    else:
+        print("la")
+        recettes = models.Recette.objects.all()[::1]
+    return recettes
 
 
 def voir_detail(request, id):
@@ -273,7 +347,7 @@ def voir_semaine(request, semaine_id):
         return render(request, 'menu/generer_menu.html')
 
 
-def trouver_recette(repas):
+def trouver_recette_de_repas(repas):
     query_object = Q()
     requete_trouve = False
     requete_vide = True
@@ -282,14 +356,13 @@ def trouver_recette(repas):
     if repas.libre_choix:
         return None
     else:
-        # on recupere le nom des saisons et des categories dans des
-        # listes locales
-        nom_saison = [saison.nom for saison in repas.saison.all()]
-        nom_categorie = [categorie.nom for categorie
-                         in repas.categorie.all()]
-        if "Indifférent" in nom_saison:
+        # on recupere le nom des saisons et des categories dans des listes locales
+        saisons = [saison.nom for saison in repas.saison.all()]
+        categories = [categorie.nom for categorie in repas.categorie.all()]
+
+        if "Indifférent" in saisons:
             print("saison indifferent")
-            if "Indifférent" in nom_categorie:
+            if "Indifférent" in categories:
                 print("et cat indifferente")
                 requete_trouve = True
                 # pas de critere donc la query est vide
@@ -301,7 +374,7 @@ def trouver_recette(repas):
                                Q(categorie__nom="Indifférent")
 
         if not requete_trouve:
-            if "Indifférent" in nom_categorie:
+            if "Indifférent" in categories:
                 print("cat indifferente")
                 requete_trouve = True
                 requete_vide = False
