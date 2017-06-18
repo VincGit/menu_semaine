@@ -38,8 +38,8 @@
     <a href="{% url "reediter_menu_semaine" %}" class="button">Modifier la semaine</a>
     {% for repas in repas_semaine.repas_set.all %}
     <div class="article">
-        <h3>{{ repas.nom }} </h3>
 		{%if repas.actif %}
+        <h3>{{ repas.nom }} </h3>
 			{%if repas.recette%}
 				<a href="{% url "voir_detail" repas.recette.id %}">{{repas.recette.nom|default_if_none:"Pas de suggestion trouvée"}}</a>
 			{%else%}
@@ -53,8 +53,6 @@
 					Pas de suggestion trouvee
 				{%endif%}
 			{%endif%}
-		{%else%}
-			Inactif, pas de repas a prevoir
         {%endif%}
     </div>
     {% empty %}
