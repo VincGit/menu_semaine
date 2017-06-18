@@ -353,7 +353,7 @@ def trouver_recette_de_repas(repas):
     requete_vide = True
 
     # si le choix est libre on ne cheche pas de recette
-    if repas.libre_choix:
+    if repas.libre_choix or not repas.actif:
         return None
     else:
         # on recupere le nom des saisons et des categories dans des listes locales

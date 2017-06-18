@@ -11,18 +11,25 @@
 			<p>
 			<h3>{{ form.instance.nom }} :
 
-			{%if form.instance.recette %}
-				{{ form.instance.recette.nom }}
+			{%if form.instance.actif %}
+				{%if form.instance.recette %}
+					{{ form.instance.recette.nom }}
+				{%else%}
+					Pas de suggestion trouvée
+				{%endif%}
+				</h3>
+				Saison : {{ form.saison }}
+				Categorie : {{ form.categorie }}
+				{{ form.recette.as_hidden }}
+				<br/>
+				<button formaction="{% url "menu_modifier" form.instance.id %}">Proposer autre chose</button>
+				</p>
 			{%else%}
-				Pas de suggestion trouvée
+				Inactif, pas de repas a prevoir
+				{{ form.saison.as_hidden }}
+				{{ form.categorie.as_hidden  }}
+				{{ form.recette.as_hidden }}
 			{%endif%}
-			</h3>
-			Saison : {{ form.saison }}
-			Categorie : {{ form.categorie }}
-			{{ form.recette.as_hidden }}
-			<br/>
-			<button formaction="{% url "menu_modifier" form.instance.id %}">Proposer autre chose</button>
-			</p>
 		{% endfor %}
 		<button formaction="{% url "generer_menu" %}">Valider</button>
 	</form>
@@ -32,18 +39,22 @@
     {% for repas in repas_semaine.repas_set.all %}
     <div class="article">
         <h3>{{ repas.nom }} </h3>
-        {%if repas.recette%}
-            <a href="{% url "voir_detail" repas.recette.id %}">{{repas.recette.nom|default_if_none:"Pas de suggestion trouvée"}}</a>
-        {%else%}
-            {%if repas.recette_libre%}
-                <form>
-                    <p>
-                        <input type="text" name="repas" id="repas" placeholder="votre choix" size="70" maxlength="10" />
-                    </p>
-                </form>
-            {%else%}
-                Pas de suggestion trouvee
-            {%endif%}
+		{%if repas.actif %}
+			{%if repas.recette%}
+				<a href="{% url "voir_detail" repas.recette.id %}">{{repas.recette.nom|default_if_none:"Pas de suggestion trouvée"}}</a>
+			{%else%}
+				{%if repas.recette_libre%}
+					<form>
+						<p>
+							<input type="text" name="repas" id="repas" placeholder="votre choix" size="70" maxlength="10" />
+						</p>
+					</form>
+				{%else%}
+					Pas de suggestion trouvee
+				{%endif%}
+			{%endif%}
+		{%else%}
+			Inactif, pas de repas a prevoir
         {%endif%}
     </div>
     {% empty %}
