@@ -8,6 +8,14 @@ class RecetteForm(forms.ModelForm):
         model = Recette
         fields = ('nom', 'ingredients', 'saison', 'categorie', 'recette', 'commentaire', 'lien', 'OK_invites')
 
+        widgets = {
+            'ingredients': forms.SelectMultiple(attrs={'size': 20}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(RecetteForm, self).__init__(*args, **kwargs)
+        self.fields['ingredients'].queryset = Ingredient.objects.order_by('nom')
+
 
 class RepasForm(forms.ModelForm):
     class Meta:
