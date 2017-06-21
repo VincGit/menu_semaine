@@ -9,11 +9,16 @@ class RecetteAdmin(admin.ModelAdmin):
     ordering = ('nom', )
     search_fields = ('nom', 'categorie', 'saison', 'OK_invites')
 
+
+class IngredientAdmin(admin.ModelAdmin):
+    ordering = ('nom',)
+
+
 admin.site.register(Categorie)
 admin.site.register(Saison)
 admin.site.register(Recette, RecetteAdmin)
 admin.site.register(Repas)
-admin.site.register(Ingredient)
+admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(ReferenceRepas)
 admin.site.register(ReferenceSaison)
 admin.site.register(SemaineRempli)

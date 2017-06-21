@@ -308,10 +308,10 @@ def selectionner_recette(selection_form):
     if not requete_vide:
         print("ici")
         print(query_object)
-        recettes = models.Recette.objects.filter(query_object)
+        recettes = models.Recette.objects.filter(query_object).order_by('nom')
     else:
         print("la")
-        recettes = models.Recette.objects.all()[::1]
+        recettes = models.Recette.objects.all().order_by('nom')[::1]
     return recettes
 
 
