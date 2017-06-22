@@ -48,3 +48,7 @@ class SelectionRecetteForm(forms.ModelForm):
             'saisons': forms.SelectMultiple(attrs={'size': 15}),
             'ingredients': forms.SelectMultiple(attrs={'size': 15}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(SelectionRecetteForm, self).__init__(*args, **kwargs)
+        self.fields['ingredients'].queryset = Ingredient.objects.order_by('nom')
