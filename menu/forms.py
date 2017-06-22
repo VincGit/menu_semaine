@@ -42,3 +42,9 @@ class SelectionRecetteForm(forms.ModelForm):
     class Meta:
         model = SelectionRecette
         fields = '__all__'
+
+        widgets = {
+            'categories': forms.SelectMultiple(attrs={'size': 15}),
+            'saisons': forms.SelectMultiple(attrs={'size': 15}),
+            'ingredients': forms.SelectMultiple(attrs={'size': 15}),
+        }

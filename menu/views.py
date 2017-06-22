@@ -251,6 +251,7 @@ def liste_recette(request):
 
     return render(request, 'menu/liste_recette.html', {'recettes': recettes, 'selection_form': form})
 
+
 def selectionner_recette(selection_form):
     query_object = Q()
     requete_trouve = False

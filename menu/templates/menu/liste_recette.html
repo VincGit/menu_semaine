@@ -4,8 +4,24 @@
 
     <form action="{% url "liste_recette" %}" method="post">
     {% csrf_token %}
-    {{ selection_form.as_ul }}
-    <input type="submit" value="Rechercher" />
+    <table id="centrertableau">
+        <caption>Paramètres de selection</caption>
+        <tr>
+            <th>Catégories</th>
+            <th>Saisons</th>
+            <th>Ingrédients</th>
+            <th>Des invités ? </th>
+        </tr>
+        <tr>
+           <td> {{ selection_form.categories}}</td>
+            <td>{{ selection_form.saisons}}</td>
+            <td>{{ selection_form.ingredients}}</td>
+           <td> {{ selection_form.invite_present}}</td>
+        </tr>
+    </table>
+    <p id="centrer">
+      <input type="submit" value="Rechercher" />
+    </p>
     </form>
 
     </br>
