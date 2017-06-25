@@ -157,11 +157,13 @@ def list_ingredients(repass):
     print("lister_ingredients")
     ingredient_names = []
     for repas in repass:
-        # get all the ingredients of the menu
-        ingredients = repas.recette.ingredients.all()
-        # extract the ingredient name and append it to the list
-        for ingredient in ingredients:
-            ingredient_names.append(ingredient.nom)
+        # recette can be empty (no menu found or inactive day)
+        if repas.recette:
+            # get all the ingredients of the menu
+            ingredients = repas.recette.ingredients.all()
+            # extract the ingredient name and append it to the list
+            for ingredient in ingredients:
+                ingredient_names.append(ingredient.nom)
     return ingredient_names
 
 
