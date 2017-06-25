@@ -56,84 +56,11 @@
         {%endif%}
     </div>
     {% empty %}
-        <p>Aucun article.</p>
+        <p>Aucun repas defini.</p>
     {% endfor %}
+	<h3>La liste des ingredients necessaires est : </h3>
+	{% for ingredient in ingredients %}
+		{{ingredient}} ;
+	{% endfor %}
 {%endif%}
 {% endblock %}
-
-
-{% comment %}
-<form action="{% url "generer_menu" %}" method="post">
-    {% csrf_token %}
-    {{formset.management_form }}
-		{% for form in formset%}
-		<ul>
-			{{ form.as_ul}}
-		</ul>
-		{% endfor %}
-    <input type="submit" value="Valider et continuer" />
-</form>
-	{% endcomment %}
-
-{% comment %}
-	<form action="{% url "generer_menu" %}"  method="post">
-		{% csrf_token %}
-		{% for form in formset%}
-		<ul>
-			{{ form.as_ul}}
-		</ul>
-		{% endfor %}
-		<input type="submit" value="Valider" />
-	</form>
-		{% endcomment %}
-
-
-	{% comment %}
-	<form method="post">
-		{% csrf_token %}
-		{% for form in formset%}
-		{{ form.id }}
-		<p>
-			{{ form.instance.nom }}
-			<span class=option_menu>
-				{{ form.saison }}
-				{{ form.categorie }}
-			</span>
-			<br/>
-			{%if form.instance.recette %}
-				{{ form.instance.recette.nom }}
-			{%else%}
-				Pas de suggestion trouvee
-			{%endif%}
-			<button formaction="{% url "menu_modifier" form.instance.id %}">Propose autre chose</button>
-		</p>
-		{% endfor %}
-		<input type="submit" value="Valider" />
-	</form>
-   {% endcomment %}
-
-
-{% comment %}
-        {% for repas in repas_semaine.repas_set.all %}
-            <div class="article">
-                <h3>{{ repas.nom }} : </h3>
-                {%if repas.recette%}
-                    <a href="{% url "voir_detail" repas.recette.id %}">{{repas.recette.nom|default_if_none:"Pas de suggestion trouvee"}}</a>
-                {%else%}
-                    {%if repas.recette_libre%}
-                        <form>
-                            <p>
-                                <input type="text" name="repas" id="repas" placeholder="votre choix" size="70" maxlength="10" />
-                            </p>
-                        </form>
-                    {%else%}
-                        Pas de suggestion trouvee
-                    {%endif%}
-                {%endif%}
-                 <a href="{% url "menu_modifier" repas.id %}" class="button">Proposer autre chose</a>
-            </div>
-        {% empty %}
-            <p>Aucun article.</p>
-        {% endfor %}
-
-    {% endcomment %}

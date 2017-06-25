@@ -126,7 +126,8 @@ def generer_menu(request):
         formset = repas_form_set(request.POST, queryset=semaine.repas_set.all().order_by('ordre'))
 
         if formset.is_valid():
-            return render(request, 'menu/generer_menu.html', {'repas_semaine': semaine})
+            ingredients = list_ingredients(semaine.repas_set.all()[::1])
+            return render(request, 'menu/generer_menu.html', {'repas_semaine': semaine, 'ingredients': ingredients})
         else:
             print("forme pas valide")
             print(formset.errors)
@@ -148,6 +149,20 @@ def generer_menu(request):
         # On le prerempli avec les repas de la semaine
         formset = repas_form_set(queryset=semaine.repas_set.all().order_by('ordre'))
         return render(request, 'menu/generer_menu.html', {'repas_semaine': semaine, 'formset': formset})
+
+
+def list_ingredients(repass):
+    """This method extracts the list of names of necessary ingredients from the list of menus given as input
+    It returns the extracted list"""
+    print("lister_ingredients")
+    ingredient_names = []
+    for repas in repass:
+        # get all the ingredients of the menu
+        ingredients = repas.recette.ingredients.all()
+        # extract the ingredient name and append it to the list
+        for ingredient in ingredients:
+            ingredient_names.append(ingredient.nom)
+    return ingredient_names
 
 
 def reediter_menu_semaine(request):
