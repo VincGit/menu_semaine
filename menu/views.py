@@ -25,61 +25,65 @@ def editer_recette(request, id):
 
 
 def generer_semaine(request):
+    """This method handles the very beginning of the week menu creation
+
+    It allows to chose
+    - the week number
+    - the week profile
+    Once done each daily profile is created and saved.
+    The user is then routed to the actual menu creation
+    """
+    # if the user submitted the form
     if request.method == 'POST':
-        semaine_id = request.session.get('semaine_id')
+        # if the user actually wanted to continue.
         if 'submit' in request.POST:
-            if semaine_id:
-                semaine = models.SemaineRempli.objects.get(id=semaine_id)
-                # On modifie la semaine avec les donnees recuperees
-                form = forms.SemaineRempli(request.POST, instance=semaine)
-                if form.is_valid():
-                    # numero_semaine = form.cleaned_data['numero_semaine']
-                    # print(numero_semaine)
-                    # if verifier_semaine_duplique(request, numero_semaine):
-                    # return render(request, 'menu/generer_nouvelle_semaine.html',
-                    # {"form_semaine": form})
-                    form.save()
-                    # on recupere une reference de repas (ete, automne, ...)
-                    # et on creer un repas en fonction de ca
-                    # TODO
-                    print(form.cleaned_data['profil'])
-                    reference_saison = models.ReferenceSaison.objects.filter(nom=
-                                                                             form.cleaned_data['profil'])
-                    liste_reference_repas = models.ReferenceRepas.objects.filter(
-                        profil=reference_saison)
+            print("submit generer_semaine")
+            semaine = models.SemaineRempli()
+            # On modifie la semaine avec les donnees recuperees
+            form = forms.SemaineRempli(request.POST, instance=semaine)
+            if form.is_valid():
+                # numero_semaine = form.cleaned_data['numero_semaine']
+                # print(numero_semaine)
+                # if verifier_semaine_duplique(request, numero_semaine):
+                # return render(request, 'menu/generer_nouvelle_semaine.html',
+                # {"form_semaine": form})
+                form.save()
+                # on recupere une reference de repas (ete, automne, ...)
+                # et on creer un repas en fonction de ca
+                # TODO
+                request.session['semaine_id'] = semaine.id
+                print(form.cleaned_data['profil'])
+                reference_saison = models.ReferenceSaison.objects.filter(nom=form.cleaned_data['profil'])
+                liste_reference_repas = models.ReferenceRepas.objects.filter(profil=reference_saison)
 
-                    # TO DO ; gerer le profil precedent
+                # TO DO ; gerer le profil precedent
 
-                    # Pour chaque repas de reference, on cree une instance de repas
-                    # en copiant les parametres de la reference
-                    # on l'associe a la semaine en cours de creation
-                    for reference_repas in liste_reference_repas:
-                        repas = models.Repas(nom=reference_repas.nom,
-                                             ordre=reference_repas.ordre,
-                                             actif=reference_repas.actif,
-                                             libre_choix=reference_repas.libre_choix,
-                                             invite=reference_repas.invite,
-                                             semaine=semaine)
-                        repas.save()
-                        repas.saison = reference_repas.saison.all()
-                        repas.categorie = reference_repas.categorie.all()
-                        repas.save()
-                    return redirect('editer_profil_semaine')
-                else:
-                    return render(request, 'menu/generer_nouvelle_semaine.html',
-                                  {"form_semaine": form})
+                # Pour chaque repas de reference, on cree une instance de repas
+                # en copiant les parametres de la reference
+                # on l'associe a la semaine en cours de creation
+                for reference_repas in liste_reference_repas:
+                    repas = models.Repas(nom=reference_repas.nom,
+                                         ordre=reference_repas.ordre,
+                                         actif=reference_repas.actif,
+                                         libre_choix=reference_repas.libre_choix,
+                                         invite=reference_repas.invite,
+                                         semaine=semaine)
+                    repas.save()
+                    repas.saison = reference_repas.saison.all()
+                    repas.categorie = reference_repas.categorie.all()
+                    repas.save()
+                return redirect('editer_profil_semaine')
+            else:
+                return render(request, 'menu/generer_nouvelle_semaine.html', {"form_semaine": form})
         else:
-            #it means the user want to cancel the week menu creation
-            #we delete the week
-            print("The week will be deleted")
-            semaine = models.SemaineRempli.objects.get(id=semaine_id)
-            semaine.delete()
+            # The user wants to abort the week menu creation
+            print("Abort week creation")
             return render(request, 'menu/accueil.html')
 
     else:
+        # It means it is the first time the user access the template
+        # We create the model. The week number is populated automatically in the model
         semaine = models.SemaineRempli()
-        semaine.save()
-        request.session['semaine_id'] = semaine.id
         form = forms.SemaineRempli(instance=semaine)
         return render(request, 'menu/generer_nouvelle_semaine.html', {"form_semaine": form})
 

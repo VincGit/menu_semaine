@@ -99,8 +99,6 @@ class Repas(models.Model):
 
 
 class SemaineRempli(models.Model):
-    numero_semaine = models.IntegerField(null=True,
-                                         default=datetime.datetime.now().isocalendar()[1] + 1)
-    profil = models.ForeignKey('ReferenceSaison', null=True)
-    date = models.DateTimeField(auto_now_add=True, auto_now=False,
-                                verbose_name="Date de creation")
+    numero_semaine = models.IntegerField(null=True, blank=True, default=datetime.datetime.now().isocalendar()[1] + 1)
+    profil = models.ForeignKey('ReferenceSaison', null=True, blank=True)
+    date = models.DateTimeField(auto_now_add=True, auto_now=False, verbose_name="Date de creation")
