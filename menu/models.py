@@ -35,7 +35,7 @@ class Recette(models.Model):
     date = models.DateTimeField(auto_now_add=True, auto_now=False, verbose_name="Date de création")
 
     def __str__(self):
-        return self.nom + self.recette
+        return self.nom
 
 
 class SelectionRecette(models.Model):
@@ -85,8 +85,8 @@ class Repas(models.Model):
     libre_choix = models.BooleanField(default=False)
     invite = models.BooleanField(default=False)
     saison = models.ManyToManyField('Saison', null=True, blank=True)
-    categorie = models.ManyToManyField('Categorie', null=True, blank=True)
-    recette = models.ForeignKey('Recette', null=True, blank=True)
+    categorie = models.ManyToManyField('Categorie', blank=True)
+    recette = models.ForeignKey('Recette', blank=True)
     semaine = models.ForeignKey('SemaineRempli', null=True)
     date = models.DateTimeField(auto_now_add=True, verbose_name="Date de creation",
                                 auto_now=False)
