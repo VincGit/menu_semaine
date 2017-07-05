@@ -8,22 +8,25 @@
 		{{formset.management_form }}
 		{% for form in formset%}
 			{{ form.id }}
-			<p>
-			<h3>{{ form.instance.nom }} :
+			<h3>{{ form.instance.nom }} :</h3>
 
 			{%if form.instance.actif %}
-				{%if form.instance.recette %}
-					{{ form.instance.recette.nom }}
-				{%else%}
-					Pas de suggestion trouvée
-				{%endif%}
-				</h3>
-				Saison : {{ form.saison }}
-				Categorie : {{ form.categorie }}
-				{{ form.recette.as_hidden }}
-				<br/>
-				<button formaction="{% url "menu_modifier" form.instance.id %}">Proposer autre chose</button>
-				</p>
+				{% if form.instance.libre_choix %}
+					{{ form.recette }}
+				{% else %}
+					<h4>
+					{%if form.instance.recette %}
+						{{ form.instance.recette.nom }}
+					{%else%}
+						Pas de suggestion trouvée
+					{%endif%}
+					</h4>
+					Saison : {{ form.saison }}
+					Categorie : {{ form.categorie }}
+					{{ form.recette.as_hidden }}
+					<br/>
+					<button formaction="{% url "menu_modifier" form.instance.id %}">Proposer autre chose</button>
+				{% endif %}
 			{%else%}
 				Inactif, pas de repas a prevoir
 				{{ form.saison.as_hidden }}
@@ -39,19 +42,11 @@
     {% for repas in repas_semaine.repas_set.all %}
     <div class="article">
 		{%if repas.actif %}
-        <h3>{{ repas.nom }} </h3>
+        	<h3>{{ repas.nom }} </h3>
 			{%if repas.recette%}
 				<a href="{% url "voir_detail" repas.recette.id %}">{{repas.recette.nom|default_if_none:"Pas de suggestion trouvée"}}</a>
 			{%else%}
-				{%if repas.recette_libre%}
-					<form>
-						<p>
-							<input type="text" name="repas" id="repas" placeholder="votre choix" size="70" maxlength="10" />
-						</p>
-					</form>
-				{%else%}
-					Pas de suggestion trouvee
-				{%endif%}
+				Pas de suggestion trouvee
 			{%endif%}
         {%endif%}
     </div>

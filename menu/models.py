@@ -84,8 +84,8 @@ class Repas(models.Model):
     actif = models.BooleanField(default=True)
     libre_choix = models.BooleanField(default=False)
     invite = models.BooleanField(default=False)
-    saison = models.ManyToManyField('Saison')
-    categorie = models.ManyToManyField('Categorie')
+    saison = models.ManyToManyField('Saison', null=True, blank=True)
+    categorie = models.ManyToManyField('Categorie', null=True, blank=True)
     recette = models.ForeignKey('Recette', null=True, blank=True)
     semaine = models.ForeignKey('SemaineRempli', null=True)
     date = models.DateTimeField(auto_now_add=True, verbose_name="Date de creation",

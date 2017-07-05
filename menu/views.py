@@ -42,26 +42,25 @@ def generer_semaine(request):
             # On modifie la semaine avec les donnees recuperees
             form = forms.SemaineRempli(request.POST, instance=semaine)
             if form.is_valid():
+                # TO DO: verifier qu'il n'y a pas de duplication de semaine en prenant en compte les annees
                 # numero_semaine = form.cleaned_data['numero_semaine']
                 # print(numero_semaine)
                 # if verifier_semaine_duplique(request, numero_semaine):
                 # return render(request, 'menu/generer_nouvelle_semaine.html',
                 # {"form_semaine": form})
+                # if all is fine, the week is saved.
                 form.save()
-                # on recupere une reference de repas (ete, automne, ...)
-                # et on creer un repas en fonction de ca
-                # TODO
+
+                # we store the week id in the live session.
                 request.session['semaine_id'] = semaine.id
-                print(form.cleaned_data['profil'])
+                # we get the profile (=the season) from the week
                 reference_saison = models.ReferenceSaison.objects.filter(nom=form.cleaned_data['profil'])
-                liste_reference_repas = models.ReferenceRepas.objects.filter(profil=reference_saison)
-
+                # we get the list of meals from the reference.
+                reference_repass = models.ReferenceRepas.objects.filter(profil=reference_saison)
                 # TO DO ; gerer le profil precedent
-
-                # Pour chaque repas de reference, on cree une instance de repas
-                # en copiant les parametres de la reference
-                # on l'associe a la semaine en cours de creation
-                for reference_repas in liste_reference_repas:
+                # for each reference meal, we create a meal instance that is associated to the current week
+                # the meal parameters are copies from the reference meal
+                for reference_repas in reference_repass:
                     repas = models.Repas(nom=reference_repas.nom,
                                          ordre=reference_repas.ordre,
                                          actif=reference_repas.actif,
@@ -130,6 +129,7 @@ def generer_menu(request):
         formset = repas_form_set(request.POST, queryset=semaine.repas_set.all().order_by('ordre'))
 
         if formset.is_valid():
+            formset.save()
             ingredients = list_ingredients(semaine.repas_set.all()[::1])
             return render(request, 'menu/generer_menu.html', {'repas_semaine': semaine, 'ingredients': ingredients})
         else:
