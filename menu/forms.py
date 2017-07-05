@@ -24,8 +24,23 @@ class RepasForm(forms.ModelForm):
 
 
 class RepasFormLeger(forms.ModelForm):
+    """"This form defines a subset of Repas model
+
+
+    It is used to give the use the choice on the three listed fields
+    It defines a widget for each field
+    It defines a queryset for recette so that they are ordered by alpha name order"""
     class Meta:
-        fields = ('nom', 'saison', 'categorie', 'recette')
+        model = Repas
+        fields = ('saison', 'categorie', 'recette')
+
+        widgets = {'categorie': forms.CheckboxSelectMultiple(),
+                   'saison': forms.CheckboxSelectMultiple(),
+                   'recette': forms.Select()}
+
+    def __init__(self, *args, **kwargs):
+        super(RepasFormLeger, self).__init__(*args, **kwargs)
+        self.fields['recette'].queryset = Recette.objects.order_by('nom')
 
 
 class NumeroSemaine(forms.Form):

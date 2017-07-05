@@ -119,10 +119,8 @@ def generer_menu(request):
     print('generer_menu')
     semaine_id = request.session.get('semaine_id')
     semaine = models.SemaineRempli.objects.get(id=semaine_id)
-    # On cree un formset avec sur le model Repas
-    repas_form_set = modelformset_factory(models.Repas, fields=('saison', 'categorie', 'recette'),
-                                          widgets={'categorie': forms.forms.CheckboxSelectMultiple(),
-                                                   'saison': forms.forms.CheckboxSelectMultiple()}, extra=0)
+    # A formset is create from the model Repas and the form RepasFormLeger
+    repas_form_set = modelformset_factory(models.Repas, form=forms.RepasFormLeger, extra=0)
 
     if request.method == 'POST':
         # On modifie la semaine avec les donnees recuperees
@@ -175,10 +173,8 @@ def reediter_menu_semaine(request):
     print('reediter_menu_semaine')
     semaine_id = request.session.get('semaine_id')
     semaine = models.SemaineRempli.objects.get(id=semaine_id)
-    # On cree un formset avec sur le model Repas
-    repas_form_set = modelformset_factory(models.Repas, fields=('saison', 'categorie', 'recette'),
-                                          widgets={'categorie': forms.forms.CheckboxSelectMultiple(),
-                                                   'saison': forms.forms.CheckboxSelectMultiple()}, extra=0)
+    # A formset is create from the model Repas and the form RepasFormLeger
+    repas_form_set = modelformset_factory(models.Repas, form=forms.RepasFormLeger, extra=0)
 
     formset = repas_form_set(queryset=semaine.repas_set.all().order_by('ordre'))
     return render(request, 'menu/generer_menu.html', {'repas_semaine': semaine, 'formset': formset})
@@ -188,10 +184,8 @@ def menu_modifier(request, form_id):
     print('menu_modifier')
     semaine_id = request.session.get('semaine_id')
     semaine = models.SemaineRempli.objects.get(id=semaine_id)
-    # On cree un formset avec sur le model Repas
-    repas_form_set = modelformset_factory(models.Repas, fields=('saison', 'categorie', 'recette'),
-                                          widgets={'categorie': forms.forms.CheckboxSelectMultiple(),
-                                                   'saison': forms.forms.CheckboxSelectMultiple()}, extra=0)
+    # A formset is create from the model Repas and the form RepasFormLeger
+    repas_form_set = modelformset_factory(models.Repas, form=forms.RepasFormLeger, extra=0)
 
     if request.method == 'POST':
         # On modifie la semaine avec les donnees recuperees
