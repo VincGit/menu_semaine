@@ -32,11 +32,12 @@ class RepasFormLeger(forms.ModelForm):
     It defines a queryset for recette so that they are ordered by alpha name order"""
     class Meta:
         model = Repas
-        fields = ('saison', 'categorie', 'recette')
+        fields = ('saison', 'categorie', 'recette', 'libre_choix')
 
         widgets = {'categorie': forms.CheckboxSelectMultiple(),
                    'saison': forms.CheckboxSelectMultiple(),
-                   'recette': forms.Select()}
+                   'recette': forms.Select(),
+                   'libre_choix': forms.CheckboxInput()}
 
     def __init__(self, *args, **kwargs):
         super(RepasFormLeger, self).__init__(*args, **kwargs)

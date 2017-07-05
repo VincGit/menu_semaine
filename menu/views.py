@@ -128,8 +128,13 @@ def generer_menu(request):
 
         if formset.is_valid():
             formset.save()
-            ingredients = list_ingredients(semaine.repas_set.all()[::1])
-            return render(request, 'menu/generer_menu.html', {'repas_semaine': semaine, 'ingredients': ingredients})
+            # If the user validated the form, using the "Valider" button
+            if 'validate' in request.POST:
+                ingredients = list_ingredients(semaine.repas_set.all()[::1])
+                return render(request, 'menu/generer_menu.html', {'repas_semaine': semaine, 'ingredients': ingredients})
+            # Else the user requested a refresh
+            else:
+                return render(request, 'menu/generer_menu.html', {'repas_semaine': semaine, 'formset': formset})
         else:
             print("forme pas valide")
             print(formset.errors)

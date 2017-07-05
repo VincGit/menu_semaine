@@ -13,6 +13,9 @@
 			{%if form.instance.actif %}
 				{% if form.instance.libre_choix %}
 					{{ form.recette }}
+                    {{ form.saison.as_hidden }}
+					{{ form.categorie.as_hidden }}
+					Je prefere une suggestion, je decoche : {{ form.libre_choix }}
 				{% else %}
 					<h4>
 					{%if form.instance.recette %}
@@ -21,6 +24,8 @@
 						Pas de suggestion trouvée
 					{%endif%}
 					</h4>
+					Je decide de  choisir mon repas : {{ form.libre_choix }}
+					<br/>
 					Saison : {{ form.saison }}
 					Categorie : {{ form.categorie }}
 					{{ form.recette.as_hidden }}
@@ -32,9 +37,11 @@
 				{{ form.saison.as_hidden }}
 				{{ form.categorie.as_hidden  }}
 				{{ form.recette.as_hidden }}
+                {{ form.libre_choix.as_hidden }}
 			{%endif%}
 		{% endfor %}
-		<button formaction="{% url "generer_menu" %}">Valider</button>
+        <button name="refresh" formaction="{% url "generer_menu" %}">Rafraichir les options</button>
+		<button name="validate" formaction="{% url "generer_menu" %}">Valider</button>
 	</form>
 {%else%}
     <h2>Menu final de la semaine {{repas_semaine.numero_semaine}}</h2>
