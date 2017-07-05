@@ -86,7 +86,7 @@ class Repas(models.Model):
     invite = models.BooleanField(default=False)
     saison = models.ManyToManyField('Saison', blank=True)
     categorie = models.ManyToManyField('Categorie', blank=True)
-    recette = models.ForeignKey('Recette', null=True)
+    recette = models.ForeignKey('Recette', null=True, blank=True)
     semaine = models.ForeignKey('SemaineRempli', null=True)
     date = models.DateTimeField(auto_now_add=True, verbose_name="Date de creation",
                                 auto_now=False)
