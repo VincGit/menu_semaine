@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.forms import modelformset_factory
 from . import forms
 from . import models
+from datetime import timedelta, date
 
 
 def editer_recette(request, id):
@@ -42,12 +43,11 @@ def generer_semaine(request):
             # On modifie la semaine avec les donnees recuperees
             form = forms.SemaineRempli(request.POST, instance=semaine)
             if form.is_valid():
-                # TO DO: verifier qu'il n'y a pas de duplication de semaine en prenant en compte les annees
-                # numero_semaine = form.cleaned_data['numero_semaine']
-                # print(numero_semaine)
-                # if verifier_semaine_duplique(request, numero_semaine):
-                # return render(request, 'menu/generer_nouvelle_semaine.html',
-                # {"form_semaine": form})
+                week_number = form.cleaned_data['numero_semaine']
+                print(week_number)
+                if is_week_duplicated(week_number):
+                    return render(request, 'menu/generer_nouvelle_semaine.html', {"form_semaine": form, "warning":
+                        "La semaine existe deja"})
                 # if all is fine, the week is saved.
                 form.save()
 
@@ -248,13 +248,28 @@ def accueil(request):
     return render(request, 'menu/accueil.html')
 
 
-def verifier_semaine_duplique(request, numero_semaine):
-    liste_semaine = models.SemaineRempli.objects.all()
-    liste_numero_semaine = [semaine.numero_semaine for semaine in liste_semaine]
-    print(numero_semaine)
-    if numero_semaine in liste_numero_semaine:
-        pass
-        # add a warning
+def is_week_duplicated(week_number):
+    """This method checks that the week being created does not already exist in database
+    It returns True in case of duplicate, False otherwise
+    It selects the menu created six months before and after the current date.
+    From this selection extracts all the week numbers
+    And finally checks that the current week being created is not included in this list
+
+    """
+
+    # Get the current date minus and plus 6 months
+    today_minus_six_months = date.today() - timedelta(weeks=30)
+    today_plus_six_months = date.today() + timedelta(weeks=30)
+    # Select all the created weeks in the interval
+    weeks = models.SemaineRempli.objects.filter(date__gt=today_minus_six_months, date__lt=today_plus_six_months)
+    # We extract the list of week numbers from the week list
+    week_numbers = [week.numero_semaine for week in weeks]
+    if week_number in week_numbers:
+        print("There is a duplication")
+        return True
+    else:
+        return False
+
 
 
 def liste_recette(request):

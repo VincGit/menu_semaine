@@ -4,6 +4,9 @@
     <form action="{% url "generer_semaine" %}" method="post">
     {% csrf_token %}
     {{ form_semaine.as_p }}
+    {%if warning %}
+        <span class="warning">{{warning}}</span>
+    {%endif%}
     <p id="centrer">
     <input type="submit" name = 'cancel' value="Annuler" />
     <input type="submit" name = 'submit' value="Valider" />
