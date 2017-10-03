@@ -1,6 +1,8 @@
 #manual addition
 db.sqlite3
 menu_semaine/production_credentials.py
+menu/migrations/
+.gitignore
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
