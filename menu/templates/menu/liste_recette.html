@@ -1,35 +1,31 @@
 {% extends "base.html" %}
-{% block title %}La liste des recettes{% endblock %}
+
 {% block contenu %}
 
-    <form action="{% url "liste_recette" %}" method="post">
-    {% csrf_token %}
-    <table id="centrertableau">
-        <caption>Paramètres de selection</caption>
-        <tr>
-            <th>Catégories</th>
-            <th>Saisons</th>
-            <th>Ingrédients</th>
-            <th>Des invités ? </th>
-        </tr>
-        <tr>
-           <td> {{ selection_form.categories}}</td>
-            <td>{{ selection_form.saisons}}</td>
-            <td>{{ selection_form.ingredients}}</td>
-           <td> {{ selection_form.invite_present}}</td>
-        </tr>
-    </table>
-    <p id="centrer">
-      <input type="submit" value="Rechercher" />
-    </p>
-    </form>
+    <div id="liste_recette">
+        <form action="{% url "liste_recette" %}" method="post">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th>Catégories</th>
+                <th>Saisons</th>
+                <th>Ingrédients</th>
+                <th>Des invités ? </th>
+            </tr>
+            <tr>
+               <td> {{ selection_form.categories}}</td>
+                <td>{{ selection_form.saisons}}</td>
+                <td>{{ selection_form.ingredients}}</td>
+               <td> {{ selection_form.invite_present}}</td>
+            </tr>
+        </table>
+        <input type="submit" value="Rechercher" />
+        </form>
+        {% for recette in recettes %}
+        <p>
+        <a href="{% url "voir_detail" recette.id %}">{{ recette.nom }}</a>
+        </p>
+        {% endfor %}
+    </div>
 
-    </br>
-    </br>
-
-    {% for recette in recettes %}
-    <p>
-    <a href="{% url "voir_detail" recette.id %}">{{ recette.nom }}</a>
-    </p>
-    {% endfor %}
 {% endblock %}

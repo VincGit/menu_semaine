@@ -10,6 +10,9 @@ class RecetteForm(forms.ModelForm):
 
         widgets = {
             'ingredients': forms.SelectMultiple(attrs={'size': 20}),
+            'saison': forms.SelectMultiple(attrs={'size': 5}),
+            'categorie': forms.SelectMultiple(attrs={'size': 10}),
+#            'recette': forms.Textarea(attrs={'cols': 75, 'rows': 35}),
         }
 
     def __init__(self, *args, **kwargs):

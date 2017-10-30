@@ -4,45 +4,47 @@
 <head>
     <meta charset=UTF-8">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
-   <title>{% block title %}Mon generateur de menus{% endblock %}</title>
+   <title>Mon generateur de menus</title>
 </head>
 
 <body>
+<aside id="aside_left">
 
-<div id="entete">
-{% block entete %}
-	<h1>
-		Mon menu de la semaine
-	</h1>
-	<h2>
-		Enfin un vendredi soir devant la télé
-	</h2>
-{% endblock %}
-</div>
-
-<div id="navigation">
-	<ul>
-		<li><a href="{% url "accueil" %}">Accueil</a></li>
-		<li><a href="{% url "generer_semaine"%}">Nouveau menu</a></li>
-		<li><a href="{% url "liste_semaines_precedentes"%}">Semaines</a></li>
-		<li><a href="{% url "liste_recette"%}">Liste des recettes</a></li>
-		<li><a href="{% url "recette_aleatoire"%}">Recette au hasard</a></li>
-		<li><a href="{% url "entrer_recette"%}">Nouvelle recette</a></li>
-	</ul>
-</div>
-
-<div id="centre">
-	<div class="contenu">
-	{% block contenu %}
+</aside>
+<div id="global_page">
+	<header>
+	{% block entete %}
+		<div>
+			<h1>Mon menu de la semaine</h1>
+			<p>(Enfin un vendredi soir devant la télé)</p>
+		</div>
+		<img src="{% static 'img/accueil.jpg' %}"/>
 	{% endblock %}
-	</div>
-</div><!-- #centre -->
+	</header>
 
-<div id="pied">
-	<p> </p>
-</div><!-- #pied -->
-<footer>
-</footer>
+	<div id="main">
+		<nav>
+			<ul>
+				<li><a href="{% url "accueil" %}">Accueil</a></li>
+				<li><a href="{% url "generer_semaine"%}">Nouveau menu</a></li>
+				<li><a href="{% url "liste_semaines_precedentes"%}">Semaines</a></li>
+				<li><a href="{% url "liste_recette"%}">Liste des recettes</a></li>
+				<li><a href="{% url "recette_aleatoire"%}">Recette au hasard</a></li>
+				<li><a href="{% url "entrer_recette"%}">Nouvelle recette</a></li>
+			</ul>
+		</nav>
 
+		<section>
+			{% block contenu %}
+			{% endblock %}
+		</section>
+	</div> <!--#main -->
+
+	<footer>
+	</footer>
+</div>
+<aside id="aside_right">
+
+</aside>
 </body>
 </html>

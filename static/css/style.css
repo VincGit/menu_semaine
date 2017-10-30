@@ -1,128 +1,40 @@
+/*Police definition for all the page */
+@font-face{
+	font-family: 'MyWebFont';
+	src: url('WebFont.eot');
+	src: url('WebFont.eot?iefix') format('eot'),
+	     url('WebFont.woff') format('woff'),
+	     url('WebFont.ttf') format('truetype'),
+	     url('WebFont.svg#webfont') format('svg');
+}
+
+
 body {
     color: #000000;
-    background: #FFFFFF;
+    background: url("fond_jaune.png");
+    display:flex;
+    margin: 0px 0px 0px 0px;
+    font-family: Calibri, Verdana, sans-serif;
 }
 
-a.button {
-    -webkit-appearance: button;
-    -moz-appearance: button;
-    appearance: button;
-    text-decoration: none;
-    color: initial;
+#global_page{
+    flex:1;
+    margin:auto;
+    border-left :solid 50px #E8A880;
+    border-right :solid 50px #E8A880;
+    background-color: #E8A880;
 }
 
-.option_menu{
-	margin-left: 400px;
+#aside_left, #aside_right{
+    width:300px;
 }
-
-*/
-/* Navigation */
-#navigation {
-    background: #000000;
-}
-#navigation a {
-    color: #000000;
-}
-#navigation a:hover, #navigation a:focus {
-    background: #00FFFF;
-}
-
-/* Contenu principal */
-.contenu {
-    color: #163B29;
-    background: #BBBBBB; /* -> 2 */
-}
-.contenu a {
-    color: #332510;
-}
-.contenu a:hover, #contenu a:focus {
-    color: #6E5122;
-}
-.contenu strong {
-    color: #181A12;
-}
-
-.contenu .warning {
-    color: #FF0000;
-}
-
-
-
-
-/* --- POSITIONNEMENT --- */
-
-/* Page */
-body {
-    padding: 10px 5px;
-    margin: 50px;
-    background: #FFFFFF;
-}
-
-/* En-tête */
-#entete {
-    padding: 20px 20px 20px 0;
-    width: 550px; /* -> 3 */
-    margin: auto;
-}
-
-/* Bloc central contenant #navigation et #contenu */
-#centre {
-    overflow: hidden; /* -> 5 */
-    background: #E4F0EE;
-    width: 1100px;
-    margin: auto;
-}
-
-/* Menu de navigation */
-#navigation {
-    width: 180px;
-    float: left; /* -> 6 */
-    background: #E4F0EE;
-}
-#navigation ul {
-    margin: 0;
-    padding: 20px 10px 20px 10px;
-    list-style: none;
-}
-#navigation a {
-    display: block;
-    height: 1%; /* -> 7 */
-    padding: 6px 10px 6px 10px;
-    line-height: 1.5;
-    font-size: .9em;
-    text-decoration: none;
-}
-
-/* Contenu */
-.contenu {
-    margin-left: 10px; /* -> 8 */
-    margin-right: 10px; /* -> 8 */
-    padding: 10px 20px;
-    background: #E4F0EE;
-}
-
-.contenu > :first-child {
-    margin-top: 10px;
-}
-.contenu p, .contenu li {
-    line-height: 1.5;
-}
-
-
-.contenu #centrer{
-    width: 150px;
-    margin: auto;
-}
-
-.contenu #centrertableau{
-    width: 850px;
-    margin: auto;
-}
+/*Generic definition for elements*/
 
 table
 {
     border-collapse: collapse;
 }
+
 td, th /* Mettre une bordure sur les td ET les th */
 {
     margin: auto;
@@ -135,21 +47,142 @@ ul {
     padding: 0;
     overflow: hidden;
 }
-li {
-    float: left;
+
+
+/* En-tête */
+header {
+    text-align: left;
+    background-color: #FF0000;
+    width:100%;
+    height:150px;
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0px 0px 20px 0px;
+    border-radius: 5px;
+    overflow: hidden;
 }
+
+header img{
+    width:200px;
+    height:100px;
+    border-radius: 5px;
+    margin: 0px 20px 0px 0px;
+}
+
+header div{
+    margin: 0px 20px 20px 20px;
+}
+
+#main{
+    display: flex;
+}
+
+/* Menu de navigation */
+nav {
+    width: 175px;
+    min-width: 150px;
+    background: #FF0000;
+    height: 500px;
+    padding: 0px 10px 0px 10px;
+}
+
+nav ul li
+{
+    list-style:none;
+    margin-left:auto;
+    margin-right:auto;
+    top:0px;
+    height:50px;
+    padding-right:10px;
+    min-width:65px;
+}
+
+nav a {
+    color:black;
+    line-height: 2.5;
+    font-size: 1em;
+    text-decoration: none;
+}
+
+nav a:hover {
+    border-bottom:solid black;
+}
+
+section
+{
+    flex: 1;
+    margin: 0px 0px 0px 20px;
+    text-align:center;
+}
+
+section a {
+    color: #332510;
+}
+section a:hover, section a:focus {
+    color: #6E5122;
+}
+section strong {
+    color: #181A12;
+}
+
+section .warning {
+    color: #FF0000;
+}
+
+
 
 /* Pied de page */
-#pied {
-    margin: 0;
-    padding: 15px 20px 10px 0;
-    font-size: .85em;
+footer {
+    background: url("food018.gif") repeat;
+    height:50px;
+    width:100%;
+    margin-top:5px;
+    margin-bottom:0px;
+    padding-bottom:0px;
 }
 
-/* Mention de copyright */
-#copyright {
-    margin: 8px 0 0 0;
-    font-size: 1em;
-    text-align: left;
+/*Page d'accueil*/
+#image_accueil{
+    width:510px;
+    border: 1px solid black;
 }
 
+#page_accueil{
+    text-align:center;
+}
+
+#liste_recette{
+    margin: 0px 0px 5px 5px;
+    text-align:center;
+    font-size: 0.8em;
+    font-style: italic;
+}
+
+#liste_recette table{
+    margin: 0px 0px 5px 5px;
+}
+
+a.button {
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+    text-decoration: none;
+    color: initial;
+}
+
+.fieldWrapper{
+    text-align: left
+}
+
+.fieldWrapper p{
+    margin: 5px 0px 1px 0px;
+    font-size: 0.8em;
+    font-style: italic;
+}
+
+.fieldWrapper #id_recette, #id_commentaire{
+    overflow: auto;
+    height: 500px;
+    width: 500px;
+}
