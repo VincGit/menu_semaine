@@ -32,7 +32,7 @@ body {
 @media screen and (max-width: 1024px)
 {
     #global_page{
-    width:600px;
+    width:700px;
     }
 }
 /*Generic definition for elements*/
@@ -88,7 +88,7 @@ header div{
 /* Menu de navigation */
 nav {
     width: 175px;
-    min-width: 150px;
+    min-width: 175px;
     background: #FF0000;
     height: 500px;
     padding: 0px 10px 0px 10px;
