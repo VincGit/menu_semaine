@@ -151,7 +151,7 @@ footer {
 
 /*Page d'accueil*/
 #image_accueil{
-    width:510px;
+    width:100%;
     border: 1px solid black;
 }
 
