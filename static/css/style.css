@@ -28,13 +28,14 @@ body {
 #aside_left, #aside_right{
     flex:1;
 }
-
+/*
 @media screen and (max-width: 1024px)
 {
     #global_page{
     width:700px;
     }
 }
+*/
 /*Generic definition for elements*/
 
 table
