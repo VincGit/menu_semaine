@@ -164,6 +164,7 @@ footer {
     text-align:center;
     font-size: 0.8em;
     font-style: italic;
+    width:100%;
 }
 
 #liste_recette table{
