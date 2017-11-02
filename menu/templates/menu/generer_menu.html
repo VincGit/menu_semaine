@@ -2,35 +2,41 @@
 
 {% block contenu %}
 {%if formset%}
+	<div id="id_generer_menu_formset">
 	<h2>Semaine {{repas_semaine.numero_semaine}}</h2>
 	<form method="post">
 		{% csrf_token %}
 		{{formset.management_form }}
 		{% for form in formset%}
 			{{ form.id }}
-			<h3>{{ form.instance.nom }} :</h3>
-
+            <div id="id_generer_menu_form">
+            <em>{{ form.instance.nom }} :</em>
 			{%if form.instance.actif %}
 				{% if form.instance.libre_choix %}
 					{{ form.recette }}
                     {{ form.saison.as_hidden }}
 					{{ form.categorie.as_hidden }}
-					Je prefere une suggestion, je decoche : {{ form.libre_choix }}
+                <p>Je prefere une suggestion, je decoche : {{ form.libre_choix }}</p>
 				{% else %}
-					<h4>
 					{%if form.instance.recette %}
-						{{ form.instance.recette.nom }}
+                        <a href="{% url "voir_detail" form.instance.recette.id %}">{{ form.instance.recette.nom }}</a>
 					{%else%}
 						Pas de suggestion trouvée
 					{%endif%}
-					</h4>
-					Je decide de  choisir mon repas : {{ form.libre_choix }}
-					<br/>
-					Saison : {{ form.saison }}
-					Categorie : {{ form.categorie }}
+					<p>Je decide de  choisir mon repas : {{ form.libre_choix }}
+                    <table>
+                    <tr>
+                        <th>Saison</th>
+                        <th>Categorie</th>
+                    </tr>
+                    <tr>
+                        <td>{{form.saison}}</td>
+                        <td>{{form.categorie}}</td>
+                    </tr>
+                    </table>
 					{{ form.recette.as_hidden }}
-					<br/>
-					<button formaction="{% url "menu_modifier" form.instance.id %}">Proposer autre chose</button>
+                     <p>
+					<button id="id_generer_menu_modify_button" formaction="{% url "menu_modifier" form.instance.id %}">Proposer autre chose</button>
 				{% endif %}
 			{%else%}
 				Inactif, pas de repas a prevoir
@@ -39,22 +45,28 @@
 				{{ form.recette.as_hidden }}
                 {{ form.libre_choix.as_hidden }}
 			{%endif%}
+            </div>
 		{% endfor %}
-        <button name="refresh" formaction="{% url "generer_menu" %}">Rafraichir les options</button>
-		<button name="validate" formaction="{% url "generer_menu" %}">Valider</button>
+        <div id="id_generer_menu_button">
+            <button name="refresh" formaction="{% url "generer_menu" %}">Rafraichir les options</button>
+            <button name="validate" formaction="{% url "generer_menu" %}">Valider</button>
+        </div>
 	</form>
+    </div>
 {%else%}
+    <div id="id_generer_menu_no_formset">
     <h2>Menu final de la semaine {{repas_semaine.numero_semaine}}</h2>
     <a href="{% url "reediter_menu_semaine" %}" class="button">Modifier la semaine</a>
     {% for repas in repas_semaine.repas_set.all %}
-    <div class="article">
+    <div id="id_generer_menu_no_formset_repas">
 		{%if repas.actif %}
-        	<h3>{{ repas.nom }} </h3>
+        	<p>{{ repas.nom }}:
 			{%if repas.recette%}
 				<a href="{% url "voir_detail" repas.recette.id %}">{{repas.recette.nom|default_if_none:"Pas de suggestion trouvée"}}</a>
 			{%else%}
 				Pas de suggestion trouvee
 			{%endif%}
+            </p>
         {%endif%}
     </div>
     {% empty %}
@@ -62,7 +74,8 @@
     {% endfor %}
 	<h3>La liste des ingredients necessaires est : </h3>
 	{% for ingredient in ingredients %}
-		{{ingredient}} ;
+		<abbr title={% for recipe in ingredient.recipe_names %}{{recipe}} {% endfor %}>{{ingredient.name}}{% if ingredient.occurrence > 1 %} ({{ingredient.occurrence}}){% endif %}{% if not forloop.last %}, {% endif %}</abbr>
 	{% endfor %}
+    </div>
 {%endif%}
 {% endblock %}

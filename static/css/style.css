@@ -160,6 +160,8 @@ footer {
     text-align:center;
 }
 
+
+/*Page liste des recettes*/
 #liste_recette{
     margin: 0px 0px 5px 5px;
     text-align:center;
@@ -169,9 +171,14 @@ footer {
 }
 
 #liste_recette table{
-    margin: 0px 0px 5px 5px;
+    margin: 0px 0px 35px 5px;
 }
 
+#liste_recette table #id_categories, #id_saisons, #id_ingredients{
+    overflow: auto;
+    width: 150px;
+}
+/*
 a.button {
     -webkit-appearance: button;
     -moz-appearance: button;
@@ -179,7 +186,9 @@ a.button {
     text-decoration: none;
     color: initial;
 }
+*/
 
+/*Page: "entrer recette" et "editer recette"*/
 .fieldWrapper{
     text-align: left
 }
@@ -190,8 +199,78 @@ a.button {
     font-style: italic;
 }
 
-.fieldWrapper #id_recette, #id_commentaire{
+.fieldWrapper #id_recette{
     overflow: auto;
     height: 500px;
     width: 500px;
+}
+
+.fieldWrapper #id_commentaire{
+    overflow: auto;
+    height: 250px;
+    width: 500px;
+}
+
+.fieldWrapper #id_ingredients, #id_saison, #id_categorie{
+    overflow: auto;
+    width: 200px;
+}
+
+.fieldWrapper #id_nom {
+    overflow: auto;
+    width: 400px;
+}
+
+.fieldWrapper #id_lien{
+    overflow: auto;
+    width: 488px;
+}
+
+/*Page: detail recette */
+#id_detail_recette_textes{
+    text-align: left;
+}
+
+/*Page generer menu*/
+#id_generer_menu_form, #id_generer_menu_no_formset_repas{
+    border-bottom:solid 2px black;
+    padding: 10px 0px 25px 0px;
+    text-align:center;
+}
+
+#id_generer_menu_form em{
+    font-size: 1.3em;
+    font-style: normal;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#id_generer_menu_form a{
+    font-size: 1em;
+    font-style: normal;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#id_generer_menu_no_formset p, p a{
+    font-size: 1em;
+    font-style: normal;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+#id_generer_menu_form a:hover{
+    text-decoration: underline;
+}
+
+
+
+
+#id_generer_menu_button{
+    margin: 25px 0px 5px 0px;
+}
+
+#id_generer_menu_modify_button{
+    margin: 25px 0px 5px 0px;
 }

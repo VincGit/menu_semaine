@@ -100,5 +100,15 @@ class Repas(models.Model):
 
 class SemaineRempli(models.Model):
     numero_semaine = models.IntegerField(null=True, blank=True, default=datetime.datetime.now().isocalendar()[1] + 1)
-    profil = models.ForeignKey('ReferenceSaison', null=True, blank=True)
+    profil = models.ForeignKey('ReferenceSaison', null=True)
     date = models.DateTimeField(auto_now_add=True, auto_now=False, verbose_name="Date de creation")
+
+
+class NecessaryIngredient():
+    def __init__(self, name, recipe_name):
+        self.name = name
+        self.occurrence = 1
+        self.recipe_names = [recipe_name]
+
+    def __str__(self):
+        return "L'ingredient {} est utilise {} fois".format(self.name, self.occurrence)

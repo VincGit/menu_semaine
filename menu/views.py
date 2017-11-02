@@ -1,10 +1,12 @@
 import random
-from django.shortcuts import render, get_object_or_404, redirect
+from datetime import timedelta, date
+
 from django.db.models import Q
 from django.forms import modelformset_factory
+from django.shortcuts import render, get_object_or_404, redirect
+
 from . import forms
 from . import models
-from datetime import timedelta, date
 
 
 def editer_recette(request, id):
@@ -21,8 +23,7 @@ def editer_recette(request, id):
     else:  # Si ce n'est pas du POST, c'est probablement une requête GET
         form = forms.RecetteForm(instance=recette)
 
-    return render(request, 'menu/editer_recette.html', {'form': form, 'id':
-        recette.id})
+    return render(request, 'menu/editer_recette.html', {'form': form, 'id': recette.id})
 
 
 def generer_semaine(request):
@@ -80,7 +81,7 @@ def generer_semaine(request):
             return render(request, 'menu/accueil.html')
 
     else:
-        # It means it is the first time the user access the template
+        # It means it is the first time the user accesses the template
         # We create the model. The week number is populated automatically in the model
         semaine = models.SemaineRempli()
         form = forms.SemaineRempli(instance=semaine)
@@ -119,7 +120,7 @@ def generer_menu(request):
     print('generer_menu')
     semaine_id = request.session.get('semaine_id')
     semaine = models.SemaineRempli.objects.get(id=semaine_id)
-    # A formset is create from the model Repas and the form RepasFormLeger
+    # A formset is created from the model Repas and the form RepasFormLeger
     repas_form_set = modelformset_factory(models.Repas, form=forms.RepasFormLeger, extra=0)
 
     if request.method == 'POST':
@@ -162,16 +163,47 @@ def list_ingredients(repass):
     """This method extracts the list of names of necessary ingredients from the list of menus given as input
     It returns the extracted list"""
     print("lister_ingredients")
-    ingredient_names = []
+    necessary_ingredients = []
     for repas in repass:
         # recette can be empty (no menu found or inactive day)
         if repas.recette:
             # get all the ingredients of the menu
             ingredients = repas.recette.ingredients.all()
-            # extract the ingredient name and append it to the list
+            # Update the list of necessary ingredients for each ingredient
             for ingredient in ingredients:
-                ingredient_names.append(ingredient.nom)
-    return ingredient_names
+                update_necessary_ingredients(ingredient, necessary_ingredients, repas.recette.nom)
+        print("necessary_ingredients")
+        print(necessary_ingredients)
+    return necessary_ingredients
+
+
+def update_necessary_ingredients(ingredient, necessary_ingredients, recipe_name):
+    """This method searches the ingredient in the list of necessary_ingredients
+    if found it updates the number of recipe for which the ingredient is necessary
+    and add the recipe name to the list
+    if not found, it creates a new ingredient and add it to the list
+    """
+    print(update_necessary_ingredients)
+    new_ingredient = True
+    # go through the list of already identified necessary ingredients
+    for necessary_ingredient in necessary_ingredients:
+        if necessary_ingredient.name == ingredient.nom:
+            # if the current one is already identified, update the number of occurrence
+            # and add the recipe name to the list
+            necessary_ingredient.occurrence +=1
+            necessary_ingredient.recipe_names.append(recipe_name)
+            new_ingredient = False
+            print("necessary_ingredient")
+            print(necessary_ingredient)
+            print(necessary_ingredient.recipe_names)
+    if new_ingredient:
+        # if the current ingredient is not listed yet
+        # create a new ingredient, and add it to the list
+        new_necessary_ingredient = models.NecessaryIngredient(ingredient.nom, recipe_name)
+        necessary_ingredients.append(new_necessary_ingredient)
+        print("new_necessary_ingredient")
+        print(new_necessary_ingredient)
+        print(new_necessary_ingredient.recipe_names)
 
 
 def reediter_menu_semaine(request):
@@ -271,7 +303,6 @@ def is_week_duplicated(week_number):
         return False
 
 
-
 def liste_recette(request):
     recettes = []
     if request.method == 'POST':
@@ -355,7 +386,7 @@ def voir_detail(request, id):
     recette = get_object_or_404(models.Recette, id=id)
     liste_saison = recette.saison.all()
     liste_categorie = recette.categorie.all()
-    liste_ingredient = recette.ingredients.all()
+    liste_ingredient = sorted(recette.ingredients.all(), key=lambda ingredient: ingredient.nom)
 
     return render(request, 'menu/detail_recette.html', {'recette': recette,
                                                         'saisons': liste_saison, 'categories': liste_categorie,
@@ -366,7 +397,7 @@ def recette_aleatoire(request):
     recette = random.choice(models.Recette.objects.all())
     liste_saison = recette.saison.all()
     liste_categorie = recette.categorie.all()
-    liste_ingredient = recette.ingredients.all()
+    liste_ingredient = sorted(recette.ingredients.all(), key=lambda ingredient: ingredient.nom)
 
     return render(request, 'menu/detail_recette.html', {'recette': recette,
                                                         'saisons': liste_saison, 'categories': liste_categorie,
