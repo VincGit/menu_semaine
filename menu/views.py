@@ -4,9 +4,11 @@ from datetime import timedelta, date
 from django.db.models import Q
 from django.forms import modelformset_factory
 from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse
 
 from . import forms
 from . import models
+from . import generatePdf
 
 
 def editer_recette(request, id):
@@ -118,31 +120,32 @@ def editer_profil_semaine(request):
 
 def generer_menu(request):
     print('generer_menu')
-    semaine_id = request.session.get('semaine_id')
-    semaine = models.SemaineRempli.objects.get(id=semaine_id)
+    week_id = request.session.get('semaine_id')
+    week = models.SemaineRempli.objects.get(id=week_id)
     # A formset is created from the model Repas and the form RepasFormLeger
     repas_form_set = modelformset_factory(models.Repas, form=forms.RepasFormLeger, extra=0)
 
     if request.method == 'POST':
         # On modifie la semaine avec les donnees recuperees
-        formset = repas_form_set(request.POST, queryset=semaine.repas_set.all().order_by('ordre'))
+        formset = repas_form_set(request.POST, queryset=week.repas_set.all().order_by('ordre'))
 
         if formset.is_valid():
             formset.save()
             # If the user validated the form, using the "Valider" button
             if 'validate' in request.POST:
-                ingredients = list_ingredients(semaine.repas_set.all()[::1])
-                return render(request, 'menu/generer_menu.html', {'repas_semaine': semaine, 'ingredients': ingredients})
+                ingredients = list_ingredients(week.repas_set.all()[::1])
+                update_week_ingredients(week.repas_set.all()[::1], week)
+                return render(request, 'menu/generer_menu.html', {'repas_semaine': week, 'ingredients': ingredients})
             # Else the user requested a refresh
             else:
-                return render(request, 'menu/generer_menu.html', {'repas_semaine': semaine, 'formset': formset})
+                return render(request, 'menu/generer_menu.html', {'repas_semaine': week, 'formset': formset})
         else:
             print("forme pas valide")
             print(formset.errors)
-            return render(request, 'menu/generer_menu.html',  {'repas_semaine': semaine, 'formset': formset})
+            return render(request, 'menu/generer_menu.html',  {'repas_semaine': week, 'formset': formset})
     else:
         # pour chaque repas de la semaine, trouver une recette
-        repass = semaine.repas_set.all()
+        repass = week.repas_set.all()
         for repas in repass:
             # on va ensuite trouver un recette associee
             recettes = trouver_recette_de_repas(repas)
@@ -155,8 +158,91 @@ def generer_menu(request):
             repas.save()
 
         # On le prerempli avec les repas de la semaine
-        formset = repas_form_set(queryset=semaine.repas_set.all().order_by('ordre'))
-        return render(request, 'menu/generer_menu.html', {'repas_semaine': semaine, 'formset': formset})
+        formset = repas_form_set(queryset=week.repas_set.all().order_by('ordre'))
+        return render(request, 'menu/generer_menu.html', {'repas_semaine': week, 'formset': formset})
+
+
+def send(request):
+    print("send")
+    week_id = request.session.get('semaine_id')
+    week = models.SemaineRempli.objects.get(id=week_id)
+
+    fish_items = week.purchase_items.filter(type__name="Fish")[::1] + week.\
+        ingredients.filter(type__name="Fish")[::1]
+    print("fish_items")
+    print(fish_items)
+    vegetable_shop_items = week.purchase_items.filter(type__name="Vegetable_shop")[::1] + week.\
+        ingredients.filter(type__name="Vegetable_shop")[::1]
+    print("vegetable_shop_items")
+    print(vegetable_shop_items)
+    milky_items = week.purchase_items.filter(type__name="Milky")[::1] + week.ingredients.\
+        filter(type__name="Milky")[::1]
+    print("milky_items")
+    print(milky_items)
+    meats_items = week.purchase_items.filter(type__name="Meats")[::1] + week.ingredients.\
+        filter(type__name="Meats")[::1]
+    print("meats_items")
+    print(meats_items)
+    fruit_vegetable_items = week.purchase_items.filter(type__name="Fruit_vegetable")[::1] + week.ingredients.\
+        filter(type__name="Fruit_vegetable")[::1]
+    print("fruit_vegetable_items")
+    print(fruit_vegetable_items)
+    medecine_items = week.purchase_items.filter(type__name="Medecine")[::1] + week.\
+        ingredients.filter(type__name="Medecine")[::1]
+    print("medecine_items")
+    print(medecine_items)
+    organic_items = week.purchase_items.filter(type__name="Organic")[::1] + week.\
+        ingredients.filter(type__name="Organic")[::1]
+    print("organic_items")
+    print(organic_items)
+    salty_items = week.purchase_items.filter(type__name="Salty")[::1] + week.\
+        ingredients.filter(type__name="Salty")[::1]
+    print("salty_items")
+    print(salty_items)
+    sweet_items = week.purchase_items.filter(type__name="Sweet")[::1] + week.\
+        ingredients.filter(type__name="Sweet")[::1]
+    print("sweet_items")
+    print(sweet_items)
+    drink_items = week.purchase_items.filter(type__name="Drink")[::1] + week.\
+        ingredients.filter(type__name="Drink")[::1]
+    print("drink_items")
+    print(drink_items)
+    home_items = week.purchase_items.filter(type__name="Home")[::1] + week.\
+        ingredients.filter(type__name="Home")[::1]
+    print("home_items")
+    print(home_items)
+    frozen_items = week.purchase_items.filter(type__name="Frozen")[::1] + week.\
+        ingredients.filter(type__name="Frozen")[::1]
+    print("frozen_items")
+    print(frozen_items)
+    no_type_items = week.purchase_items.filter(type__name__isnull=True, type__isnull=True)[::1] + week.\
+        ingredients.filter(type__name__isnull=True, type__isnull=True)[::1]
+    print("no_type_items")
+    print(no_type_items)
+
+    ctxt = {"repas_semaine": week,
+            'fish_items': fish_items,
+            'vegetable_shop_items': vegetable_shop_items,
+            'milky_items': milky_items,
+            'meats_items': meats_items,
+            'fruit_vegetable_items': fruit_vegetable_items,
+            'medecine_items': medecine_items,
+            'organic_items': organic_items,
+            'salty_items': salty_items,
+            'sweet_items': sweet_items,
+            'drink_items': drink_items,
+            'home_items': home_items,
+            'frozen_items': frozen_items,
+            'no_type_items': no_type_items,
+            }
+
+    s = generatePdf.GeneratePDF(template="menu/liste.html")
+    s._make_pdf(ctxt=ctxt)
+
+    email_ctx = {"week_nb": week.numero_semaine}
+    subject="Liste des courses semaine {}".format(week.numero_semaine)
+    s.send_pdf(subject=subject, email_template="menu/mail.html",
+               ctxt=email_ctx, to=("vincentlegoff2004@yahoo.fr",))
 
 
 def list_ingredients(repass):
@@ -172,9 +258,25 @@ def list_ingredients(repass):
             # Update the list of necessary ingredients for each ingredient
             for ingredient in ingredients:
                 update_necessary_ingredients(ingredient, necessary_ingredients, repas.recette.nom)
+
         print("necessary_ingredients")
         print(necessary_ingredients)
     return necessary_ingredients
+
+
+def update_week_ingredients(repass, week):
+    """This method extracts the list of names of necessary ingredients from the list of menus given as input
+    and updates the filled week with them """
+    print("update_week_ingredients")
+    week.ingredients.clear()
+    for repas in repass:
+        # recette can be empty (no menu found or inactive day)
+        if repas.recette:
+            # get all the ingredients of the menu
+            ingredients = repas.recette.ingredients.all()
+            # Update the list of ingredients for the week
+            for ingredient in ingredients:
+                week.ingredients.add(ingredient)
 
 
 def update_necessary_ingredients(ingredient, necessary_ingredients, recipe_name):
@@ -193,17 +295,11 @@ def update_necessary_ingredients(ingredient, necessary_ingredients, recipe_name)
             necessary_ingredient.occurrence +=1
             necessary_ingredient.recipe_names.append(recipe_name)
             new_ingredient = False
-            print("necessary_ingredient")
-            print(necessary_ingredient)
-            print(necessary_ingredient.recipe_names)
     if new_ingredient:
         # if the current ingredient is not listed yet
         # create a new ingredient, and add it to the list
         new_necessary_ingredient = models.NecessaryIngredient(ingredient.nom, recipe_name)
         necessary_ingredients.append(new_necessary_ingredient)
-        print("new_necessary_ingredient")
-        print(new_necessary_ingredient)
-        print(new_necessary_ingredient.recipe_names)
 
 
 def reediter_menu_semaine(request):
@@ -408,8 +504,9 @@ def voir_semaine(request, semaine_id):
     if semaine_id:
         request.session['semaine_id'] = semaine_id
         semaine = models.SemaineRempli.objects.get(id=semaine_id)
-        return render(request, 'menu/generer_menu.html',
-                      {'repas_semaine': semaine})
+        ingredients = list_ingredients(semaine.repas_set.all()[::1])
+        return render(request, 'menu/generer_menu.html', {'repas_semaine': semaine, 'ingredients': ingredients})
+#        return render(request, 'menu/generer_menu.html', {'repas_semaine': semaine})
     else:
         return render(request, 'menu/generer_menu.html')
 
@@ -479,3 +576,30 @@ def liste_semaines_precedentes(request):
 
     return render(request, 'menu/voir_liste_semaine.html',
                   {'liste_semaine': liste_semaine})
+
+
+def purchase_list(request):
+        week_id = request.session['semaine_id']
+        week = models.SemaineRempli.objects.get(id=week_id)
+        ingredients = list_ingredients(week.repas_set.all()[::1])
+        purchase_items = models.PurchaseItem.objects.all()
+
+        for purchase_item in purchase_items:
+            if purchase_item.recurring:
+                week.purchase_items.add(purchase_item)
+
+        week_form = forms.FilledWeekFormForPurchase(instance=week)
+
+        if request.method == 'POST':
+            week_form = forms.FilledWeekFormForPurchase(request.POST, instance=week)
+            if week_form.is_valid():
+                week_form.save()
+                send(request)
+                return render(request, 'menu/end.html')
+            else:
+                print("form for liste_recette is not valid")
+
+        return render(request, 'menu/purchase_list.html', {'ingredients': ingredients,
+                                                           'purchase_items': purchase_items,
+                                                           'filled_week': week_form})
+

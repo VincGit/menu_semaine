@@ -1,6 +1,6 @@
 from django.contrib import admin
 from menu.models import Categorie, Saison, Recette, Repas, Ingredient, \
-ReferenceRepas, SemaineRempli, ReferenceSaison
+ReferenceRepas, SemaineRempli, ReferenceSaison, PurchaseType, PurchaseItem
 
 
 class RecetteAdmin(admin.ModelAdmin):
@@ -27,3 +27,5 @@ admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(ReferenceRepas)
 admin.site.register(ReferenceSaison)
 admin.site.register(SemaineRempli, SemaineRempliAdmin)
+admin.site.register(PurchaseType)
+admin.site.register(PurchaseItem)

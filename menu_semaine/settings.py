@@ -53,6 +53,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'menu',
+    'sendpdf',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -113,6 +114,13 @@ else:
         }
     }
 
+# Email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp-vincentlegoff2004.alwaysdata.net'
+EMAIL_PORT = 587
+EMAIL_HOST_PASSWORD = 'QP_woei0116'
+EMAIL_HOST_USER = 'vincentlegoff2004@alwaysdata.net'
+DEFAULT_FROM_EMAIL = 'vincentlegoff2004@alwaysdata.net'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -139,3 +147,5 @@ else:
     STATICFILES_DIRS = (
         os.path.join(BASE_DIR, "static"),
     )
+
+

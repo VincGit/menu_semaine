@@ -178,15 +178,15 @@ footer {
     overflow: auto;
     width: 150px;
 }
-/*
-a.button {
+
+#id_boutton {
     -webkit-appearance: button;
     -moz-appearance: button;
     appearance: button;
     text-decoration: none;
     color: initial;
 }
-*/
+
 
 /*Page: "entrer recette" et "editer recette"*/
 .fieldWrapper{
@@ -274,3 +274,9 @@ a.button {
 #id_generer_menu_modify_button{
     margin: 25px 0px 5px 0px;
 }
+
+
+
+
+
+

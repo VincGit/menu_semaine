@@ -1,0 +1,107 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/pdf_style.css' %}" />
+   <title>Mon generateur de menus</title>
+</head>
+<body>
+    <div id="id_global">
+        <div id="id_repas">
+            <h2>Menu de la semaine {{repas_semaine.numero_semaine}}</h2>
+            {% for repas in repas_semaine.repas_set.all %}
+            <div id="id_repas_detail">
+                {%if repas.actif %}
+                    <p>{{ repas.nom }}:
+                    {%if repas.recette%}
+                        {{repas.recette.nom|default_if_none:"Pas de suggestion trouvée"}}
+                    {%else%}
+                        Pas de suggestion trouvée
+                    {%endif%}
+                    </p>
+                {%endif%}
+            </div>
+        </div>
+        {% endfor %}
+        <h3 id="id_title_ingredients">Liste des courses. Semaine {{repas_semaine.numero_semaine}}</h3>
+        <div id="id_ingredients">
+            <div id="id_ingredients_left">
+                <div id="id_fish" class="flexbox">
+                    {% for fish_item in fish_items %}
+                        <p>{{fish_item}}</p>
+                    {% endfor %}
+                </div>
+                <div id="id_home" class="flexbox">
+                    {% for home_item in home_items %}
+                        <p>{{home_item}}</p>
+                    {% endfor %}
+                </div>
+                <div id="id_drink" class="flexbox">
+                    {% for drink_item in drink_items %}
+                        <p>{{drink_item}}</p>
+                    {% endfor %}
+                </div>
+                <div id="id_sweet" class="flexbox">
+                    {% for sweet_item in sweet_items %}
+                        <p>{{sweet_item}}</p>
+                    {% endfor %}
+                </div>
+                <div id="id_salty" class="flexbox">
+                    {% for salty_item in salty_items %}
+                        <p>{{salty_item}}</p>
+                    {% endfor %}
+                </div>
+                <div id="id_organic" class="flexbox">
+                    <h2>BIO</h2>
+                    {% for organic_item in organic_items %}
+                        <p>{{organic_item}}</p>
+                    {% endfor %}
+                </div>
+                <div id="id_medecine" class="flexbox">
+                    <h2>Pharmacie</h2>
+                    {% for medecine_item in medecine_items %}
+                        <p>{{medecine_item}}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div id="id_ingredients_right">
+                <div id="id_fruit_vegetable" class="flexbox">
+                    {% for fruit_vegetable_item in fruit_vegetable_items %}
+                        <p>{{fruit_vegetable_item}}</p>
+                    {% endfor %}
+                </div>
+                <div id="id_meats" class="flexbox">
+                    {% for meats_item in meats_items %}
+                        <p>{{meats_item}}</p>
+                    {% endfor %}
+                </div>
+                <div id="id_milky" class="flexbox">
+                    {% for milky_item in milky_items %}
+                        <p>{{milky_item}}</p>
+                    {% endfor %}
+                </div>
+                <div id="vegetable_shop_items" class="flexbox">
+                    <h2>Coeur des Champs</h2>
+                    {% for vegetable_shop_item in vegetable_shop_items %}
+                        <p>{{vegetable_shop_item}}</p>
+                    {% endfor %}
+                </div>
+                <div id="frozen_items" class="flexbox">
+                    <h2>Surgelés</h2>
+                    {% for frozen_item in frozen_items %}
+                        <p>{{frozen_item}}</p>
+                    {% endfor %}
+                </div>
+                <h2>Divers</h2>
+                <div id="no_type_items" class="flexbox">
+                    {% for no_type_item in no_type_items %}
+                        <p>{{no_type_item}}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

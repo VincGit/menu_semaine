@@ -50,6 +50,24 @@ class NumeroSemaine(forms.Form):
     numero_semaine = forms.IntegerField(required=False)
 
 
+class FilledWeekFormForPurchase(forms.ModelForm):
+    """This class will defines the form to choose the ingredients and the purchase items
+    It is used at the very end of the flow to finalize the purchase list"""
+    class Meta:
+        model = SemaineRempli
+        fields = ('purchase_items', 'ingredients')
+        # fields = '__all__'
+
+        widgets = {
+            'purchase_items': forms.CheckboxSelectMultiple(),
+            'ingredients': forms.CheckboxSelectMultiple(),
+        }
+
+    # def __init__(self, *args, **kwargs):
+    #     super(FilledWeekFormForPurchase, self).__init__(*args, **kwargs)
+    #     self.fields['purchase_items'].queryset = PurchaseItem.objects.filter(type__name)
+
+
 class SemaineRempli(forms.ModelForm):
     class Meta:
         model = SemaineRempli

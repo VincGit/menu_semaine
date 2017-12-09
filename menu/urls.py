@@ -2,9 +2,8 @@
 from django.conf.urls import url
 from . import views
 
-
 urlpatterns = [
-    #gestion du menu de la semaine
+    # gestion du menu de la semaine
     url(r'^generer_semaine/', views.generer_semaine, name="generer_semaine"),
     url(r'^generer_menu/$', views.generer_menu, name="generer_menu"),
     url(r'^voir_semaines_precedentes/', views.liste_semaines_precedentes,
@@ -17,11 +16,13 @@ urlpatterns = [
         name="menu_modifier"),
     url(r'^reediter_menu_semaine/', views.reediter_menu_semaine,
         name="reediter_menu_semaine"),
-    #gestion des recettes
+    # gestion des recettes
     url(r'^liste$', views.liste_recette, name="liste_recette"),
     url(r'^recette/(?P<id>\d+)', views.voir_detail, name="voir_detail"),
     url(r'^entrer_recette/', views.entrer_recette, name="entrer_recette"),
     url(r'^editer_recette/(?P<id>\d+)', views.editer_recette,
         name="editer_recette"),
     url(r'^recette', views.recette_aleatoire, name="recette_aleatoire"),
-        ]
+    url(r'^send/', views.send, name="send"),
+    url(r'^purchase_list/', views.purchase_list, name="purchase_list"),
+]

@@ -9,6 +9,13 @@ class Categorie(models.Model):
         return self.nom
 
 
+class PurchaseType(models.Model):
+    name = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.name
+
+
 class Saison(models.Model):
     nom = models.CharField(max_length=30)
 
@@ -18,9 +25,19 @@ class Saison(models.Model):
 
 class Ingredient(models.Model):
     nom = models.CharField(max_length=70)
+    type = models.ManyToManyField('PurchaseType', verbose_name="Type d'ingrédients")
 
     def __str__(self):
         return self.nom
+
+
+class PurchaseItem(models.Model):
+    name = models.CharField(max_length=70)
+    type = models.ManyToManyField('PurchaseType', verbose_name="Type d'achat")
+    recurring = models.BooleanField(default=False, verbose_name="Récurrent")
+
+    def __str__(self):
+        return self.name
 
 
 class Recette(models.Model):
@@ -68,7 +85,7 @@ class ReferenceRepas(models.Model):
     saison = models.ManyToManyField('Saison')
     categorie = models.ManyToManyField('Categorie')
     date = models.DateTimeField(auto_now_add=True, auto_now=False,
-                                verbose_name="Date de creation")
+                                verbose_name="Date de création")
 
     def __str__(self):
         return self.nom
@@ -88,7 +105,7 @@ class Repas(models.Model):
     categorie = models.ManyToManyField('Categorie', blank=True)
     recette = models.ForeignKey('Recette', null=True, blank=True)
     semaine = models.ForeignKey('SemaineRempli', null=True)
-    date = models.DateTimeField(auto_now_add=True, verbose_name="Date de creation",
+    date = models.DateTimeField(auto_now_add=True, verbose_name="Date de création",
                                 auto_now=False)
 
     def __str__(self):
@@ -101,7 +118,9 @@ class Repas(models.Model):
 class SemaineRempli(models.Model):
     numero_semaine = models.IntegerField(null=True, blank=True, default=datetime.datetime.now().isocalendar()[1] + 1)
     profil = models.ForeignKey('ReferenceSaison', null=True)
-    date = models.DateTimeField(auto_now_add=True, auto_now=False, verbose_name="Date de creation")
+    date = models.DateTimeField(auto_now_add=True, auto_now=False, verbose_name="Date de création")
+    purchase_items = models.ManyToManyField('PurchaseItem', verbose_name="Achat", blank=True)
+    ingredients = models.ManyToManyField('Ingredient', verbose_name="Ingrédient", blank=True)
 
 
 class NecessaryIngredient():

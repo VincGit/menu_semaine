@@ -1,0 +1,59 @@
+body {
+    color: #000000;
+    display:flex;
+    margin: 0px 0px 0px 0px;
+    font-family: Calibri, Verdana, sans-serif;
+}
+
+#id_global{
+    margin:auto;
+    border-left :solid 25px #E8A880;
+    border-right :solid 25px #E8A880;
+    width:800px;
+}
+
+/*Page generer menu*/
+#id_repas, #id_repas_detail{
+    border-bottom:solid 2px black;
+    padding: 10px 0px 25px 0px;
+    text-align:center;
+}
+
+#id_repas em{
+    font-size: 1.3em;
+    font-style: normal;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#id_repas p{
+    font-size: 1em;
+    font-style: normal;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#id_title_ingredients {
+        page-break-before:always;
+}
+
+#id_ingredients {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+    }
+
+#id_ingredient > div {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+ justify-content: space-between;
+  margin-right: 10%;
+  background-color: yellow;
+  border: 1px dashed black;
+}
+
+.flexbox{
+    width: 400px;
+    border-bottom: 1px dotted black;
+}

@@ -1,10 +1,12 @@
 {% extends "base.html" %}
+{% load static %}
+
 
 {% block contenu %}
 {%if formset%}
 	<div id="id_generer_menu_formset">
 	<h2>Semaine {{repas_semaine.numero_semaine}}</h2>
-	<form method="post">
+	<form method="post" id="id_form">
 		{% csrf_token %}
 		{{formset.management_form }}
 		{% for form in formset%}
@@ -35,7 +37,7 @@
                     </tr>
                     </table>
 					{{ form.recette.as_hidden }}
-                     <p>
+                     </p>
 					<button id="id_generer_menu_modify_button" formaction="{% url "menu_modifier" form.instance.id %}">Proposer autre chose</button>
 				{% endif %}
 			{%else%}
@@ -76,6 +78,13 @@
 	{% for ingredient in ingredients %}
 		<abbr title={% for recipe in ingredient.recipe_names %}{{recipe}} {% endfor %}>{{ingredient.name}}{% if ingredient.occurrence > 1 %} ({{ingredient.occurrence}}){% endif %}{% if not forloop.last %}, {% endif %}</abbr>
 	{% endfor %}
+	</br>
+		</br>
+		</br>
+	<p>
+		<a id="id_boutton" href="{% url "purchase_list" %}" class="button">Continuer avec la liste des courses</a>
+	</p>
+
     </div>
 {%endif%}
 {% endblock %}
