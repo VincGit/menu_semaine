@@ -11,8 +11,8 @@ import pdfkit
 
 #settings.configure() #: I use this during sphinx document generation
 
-path_wkthmltopdf = getattr(
-    settings, "WKTHMLTOPDF_PATH", "/usr/bin/wkhtmltopdf")
+# Get the path to the wkhtmltopdf binary from the settings
+path_wkthmltopdf = getattr(settings, "WKTHMLTOPDF_PATH")
 config = pdfkit.configuration(wkhtmltopdf=path_wkthmltopdf)
 
 

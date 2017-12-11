@@ -122,6 +122,11 @@ EMAIL_HOST_PASSWORD = 'QP_woei0116'
 EMAIL_HOST_USER = 'vincentlegoff2004@alwaysdata.net'
 DEFAULT_FROM_EMAIL = 'vincentlegoff2004@alwaysdata.net'
 
+if prod:
+    WKTHMLTOPDF_PATH = "/home/vincentlegoff2004/menu/bin/wkhtmltopdf"
+else:
+    WKTHMLTOPDF_PATH = "/usr/bin/wkhtmltopdf"
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 

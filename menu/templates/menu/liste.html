@@ -29,28 +29,39 @@
         <div id="id_ingredients">
             <div id="id_ingredients_left">
                 <div id="id_fish" class="flexbox">
+                    <h2>Poisson</h2>
                     {% for fish_item in fish_items %}
                         <p>{{fish_item}}</p>
                     {% endfor %}
                 </div>
                 <div id="id_home" class="flexbox">
+                    <h2>Intérieur</h2>
                     {% for home_item in home_items %}
                         <p>{{home_item}}</p>
                     {% endfor %}
                 </div>
                 <div id="id_drink" class="flexbox">
+                    <h2>Boissons</h2>
                     {% for drink_item in drink_items %}
                         <p>{{drink_item}}</p>
                     {% endfor %}
                 </div>
                 <div id="id_sweet" class="flexbox">
+                    <h2>Sucré</h2>
                     {% for sweet_item in sweet_items %}
                         <p>{{sweet_item}}</p>
                     {% endfor %}
                 </div>
                 <div id="id_salty" class="flexbox">
+                    <h2>Salé</h2>
                     {% for salty_item in salty_items %}
                         <p>{{salty_item}}</p>
+                    {% endfor %}
+                </div>
+                <div id="frozen_items" class="flexbox">
+                    <h2>Surgelés</h2>
+                    {% for frozen_item in frozen_items %}
+                        <p>{{frozen_item}}</p>
                     {% endfor %}
                 </div>
                 <div id="id_organic" class="flexbox">
@@ -68,16 +79,19 @@
             </div>
             <div id="id_ingredients_right">
                 <div id="id_fruit_vegetable" class="flexbox">
+                    <h2>Fruits et légumes</h2
                     {% for fruit_vegetable_item in fruit_vegetable_items %}
                         <p>{{fruit_vegetable_item}}</p>
                     {% endfor %}
                 </div>
                 <div id="id_meats" class="flexbox">
+                    <h2>Viande</h2
                     {% for meats_item in meats_items %}
                         <p>{{meats_item}}</p>
                     {% endfor %}
                 </div>
                 <div id="id_milky" class="flexbox">
+                     <h2>Produits laitiers</h2
                     {% for milky_item in milky_items %}
                         <p>{{milky_item}}</p>
                     {% endfor %}
@@ -86,12 +100,6 @@
                     <h2>Coeur des Champs</h2>
                     {% for vegetable_shop_item in vegetable_shop_items %}
                         <p>{{vegetable_shop_item}}</p>
-                    {% endfor %}
-                </div>
-                <div id="frozen_items" class="flexbox">
-                    <h2>Surgelés</h2>
-                    {% for frozen_item in frozen_items %}
-                        <p>{{frozen_item}}</p>
                     {% endfor %}
                 </div>
                 <h2>Divers</h2>
