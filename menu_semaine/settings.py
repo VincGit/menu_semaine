@@ -116,9 +116,9 @@ else:
 
 # Email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp-vincentlegoff2004.alwaysdata.net'
+EMAIL_HOST = 'production_credentials.production_mail_account'
 EMAIL_PORT = 587
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_PASSWORD = 'production_credentials.production_credentials'
 EMAIL_HOST_USER = 'vincentlegoff2004@alwaysdata.net'
 DEFAULT_FROM_EMAIL = 'vincentlegoff2004@alwaysdata.net'
 
