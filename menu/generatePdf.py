@@ -47,6 +47,10 @@ class GeneratePDF:
             static_path = getattr(settings, "STATIC_ROOT")
         print("static_path")
         print(static_path)
+        if static_path is None:
+            static_path.append("/home/vincentlegoff2004/menu/menu_semaine/static")
+        print("static_path")
+        print(static_path)
         css = path.join(static_path[0], "css/pdf_style.css")
         print(css)
         print("css")
