@@ -43,12 +43,12 @@ class GeneratePDF:
         static_path = getattr(settings, "STATICFILES_DIRS")
         print("static_path")
         print(static_path)
-        if not static_path
+        if not static_path:
             print("stat file is empty 1")
             static_path = getattr(settings, "STATIC_ROOT")
         print("static_path")
         print(static_path)
-        if not static_path
+        if not static_path:
             print("stat file is empty 2")
             static_path.append("/home/vincentlegoff2004/menu/menu_semaine/static")
         print("static_path")
