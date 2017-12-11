@@ -41,8 +41,14 @@ class GeneratePDF:
         }
 
         static_path = getattr(settings, "STATICFILES_DIRS")
+        print("static_path")
+        print(static_path)
         css = path.join(static_path[0], "css/pdf_style.css")
+        print(css)
+        print("css")
         html = self.template.render(ctxt)
+        print("html")
+        print(html)
         self.pdf = pdfkit.from_string(html, False, configuration=config, css=css, options=options)
 
     def download(self):
