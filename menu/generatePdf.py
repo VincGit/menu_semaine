@@ -53,9 +53,10 @@ class GeneratePDF:
             static_path.append("/home/vincentlegoff2004/menu/menu_semaine/static")
         print("static_path")
         print(static_path)
-        css = path.join(static_path[0], "css/pdf_style.css")
+        css = path.join(static_path, "css/pdf_style.css")
         print(css)
         print("css")
+
         html = self.template.render(ctxt)
         print("html")
         print(html)
