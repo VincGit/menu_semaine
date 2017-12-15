@@ -123,7 +123,7 @@ EMAIL_HOST_USER = 'vincentlegoff2004@alwaysdata.net'
 DEFAULT_FROM_EMAIL = 'vincentlegoff2004@alwaysdata.net'
 
 if prod:
-    WKTHMLTOPDF_PATH = "/home/vincentlegoff2004/menu/bin/wkhtmltox/bin"
+    WKTHMLTOPDF_PATH = "/home/vincentlegoff2004/menu/bin"
 else:
     WKTHMLTOPDF_PATH = "/usr/bin/wkhtmltopdf"
 
