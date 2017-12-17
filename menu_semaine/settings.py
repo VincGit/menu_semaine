@@ -15,13 +15,13 @@ import os
 from . import production_credentials
 try:
     if os.environ["ENV"] == "local":
-        prod = False
+        PROD = False
         print("Local dev")
     else:
-        prod = True
+        PROD = True
         print("Production phase")
 except:
-    prod = True
+    PROD = True
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -32,12 +32,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '8$)i$87l$pz6l!dh8@^f_!$n-vdd9u8dxqj$93#$uqgp#e*%co'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if prod:
+if PROD:
     DEBUG = False
 else:
     DEBUG = True
 
-if prod:
+if PROD:
     ALLOWED_HOSTS = ['vincentlegoff2004.alwaysdata.net']
 else:
     ALLOWED_HOSTS = []
@@ -92,7 +92,7 @@ WSGI_APPLICATION = 'menu_semaine.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-if prod:
+if PROD:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
@@ -121,8 +121,9 @@ EMAIL_PORT = 587
 EMAIL_HOST_PASSWORD = production_credentials.production_mail_password
 EMAIL_HOST_USER = 'vincentlegoff2004@alwaysdata.net'
 DEFAULT_FROM_EMAIL = 'vincentlegoff2004@alwaysdata.net'
+EMAIL_TO_LIST = production_credentials.production_mail_to_list
 
-if prod:
+if PROD:
     WKTHMLTOPDF_PATH = "/home/vincentlegoff2004/menu/bin/wkhtmltox/bin/wkhtmltopdf"
 else:
     WKTHMLTOPDF_PATH = "/usr/bin/wkhtmltopdf"
@@ -146,7 +147,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-if prod:
+if PROD:
     STATIC_ROOT = os.path.join(BASE_DIR, "static")
 else:
     STATICFILES_DIRS = os.path.join(BASE_DIR, "static")

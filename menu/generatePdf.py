@@ -39,72 +39,36 @@ class GeneratePDF:
             'margin-left': '0.50in',
             'orientation': 'Portrait',
         }
+        production_mode = getattr(settings, "PROD")
+        if not production_mode:
+            static_path = getattr(settings, "STATICFILES_DIRS")
 
-        static_path = getattr(settings, "STATICFILES_DIRS")
-        print("static_path")
-        print(static_path)
-        if not static_path:
-            print("stat file is empty 1")
+        else:
             static_path = getattr(settings, "STATIC_ROOT")
-        print("static_path")
-        print(static_path)
-        if not static_path:
-            print("stat file is empty 2")
-            static_path.append("/home/vincentlegoff2004/menu/menu_semaine/static")
+
         print("static_path")
         print(static_path)
         css = path.join(static_path, "css/pdf_style.css")
-        print(css)
-        print("css")
 
         html = self.template.render(ctxt)
-        print("html")
-        print(html)
         self.pdf = pdfkit.from_string(html, False, configuration=config, css=css, options=options)
 
-    def download(self):
-        """Call this method if you want the user to download the PDF document generated"""
-        response = http.HttpResponse(content_type='application/pdf')
-        response[
-            'Content-Disposition'] = 'attachment; filename="{}.pdf"'.format(self.filename)
-        response.write(self.pdf)
-        return response
-
-    def inline(self):
-        """Call this method if you want the user to be able to view the in the browser"""
-        response = http.HttpResponse(content_type='application/pdf')
-        response[
-            'Content-Disposition'] = 'inline; filename="{}.pdf"'.format(self.filename)
-        response.write(self.pdf)
-        return response
-
     def send_pdf(self, subject, email_template, ctxt, from_email=getattr(settings, "DEFAULT_FROM_EMAIL"),
-                 to=("valid_email",), **kwargs):
+                 to=getattr(settings, "EMAIL_TO_LIST"), **kwargs):
         """
         Call this method if you want the user to send the PDF to one or more email addresses.
-
         This method is compliant with the Django's EmailMultiAlternatives. This means that `**kwargs` can define the following::
            bcc - which is `bcc = None` by default
-
            cc - which is `cc = None` by default
-
            reply_to - which is `reply_to = None` by default
-
            headers - which is `headers = None` by default
-
            connection - which is `connection = None` by default
-
         It is advisable that you set up SMTP settings for an outbound email.
-
         Args:
            subject (str) - Subject of the email you want to send.
-
            email_template (str) - The html template that can be access by DJango template engine.
-
            ctxt (dict or Django context object) - Data that is to be populated in the `email_template`.
-
            from_email (Optional[str]) - A valid email address that is allowed to send email. By default it is defined at the Django settins `DEFAULT_FROM_EMAIL`.
-
            to (tuple) - A tuple of the recipients' email addresses.
 
         Examples:
@@ -122,15 +86,10 @@ class GeneratePDF:
 
 
         """
-        message_text = get_template(
-            "{}".format(email_template)).render(ctxt)
-        email_message = EmailMultiAlternatives(
-            subject, message_text, from_email, to, **kwargs)
-        print("email_message")
-        print(email_message)
+        message_text = get_template("{}".format(email_template)).render(ctxt)
+        email_message = EmailMultiAlternatives(subject, message_text, from_email, to, **kwargs)
         try:
-            message_html = get_template(
-                "{}".format(email_template)).render(ctxt)
+            message_html = get_template("{}".format(email_template)).render(ctxt)
             email_message.attach_alternative(message_html, 'text/html')
         except TemplateDoesNotExist:
             print("Error")
@@ -138,95 +97,3 @@ class GeneratePDF:
         email_message.attach(
             filename="{}.pdf".format(self.filename), content=self.pdf, mimetype="application/pdf")
         email_message.send()
-
-
-class PDFResponseMixin(TemplateResponseMixin):
-    """
-    The base view for PDF generation and view.
-
-    The childs of this object should define a get method, assign the following values::
-            `pdf_filename` (str) - name of the PDF file to be generated
-
-            `pdf_template` (str) - location of the html template to be used for generation of
-                the `pdf_filename`.pdf
-
-            `context` (dict) - The context data to be passed by Django template engine to `pdf_template`
-
-    Examples:
-        Suppose we want to create a view for viewing PDF document inline::
-            >>> from django.views.generic import View
-            >>> from sendpdf.topdf import PDFResponseMixin
-            >>> class DownloadPDF(PDFResponseMixin, View):
-                        pdf_filename = "account_statement"
-                        pdf_template = "account_statement.html"
-                        context = demo_data()
-                        def get(self, request, *args, **kwargs):
-                            self.get_pdf()
-                            return self.pdfgen.inline()
-    """
-    pdf_filename = None
-    pdf_template = None
-    context = {}
-    pdfgen = None
-    pdf = None
-
-    def get_pdfgen(self):
-        if self.pdfgen is not None:
-            return self.pdfgen
-        self.pdfgen = GeneratePDF(self.pdf_template)
-        return self.pdfgen
-
-    def get_pdf(self):
-        if self.pdf is not None:
-            return self.pdf
-        pdfg = self.get_pdfgen()
-        self.pdf = pdfg._make_pdf(self.context, self.pdf_filename)
-        return self.pdf
-
-
-class DownloadPDF(PDFResponseMixin, View):
-    """
-    The base view for PDF generation and downloading.
-
-    The childs of this object should assign the following values::
-            `pdf_filename` (str) - name of the PDF file to be generated
-
-            `pdf_template` (str) - location of the html template to be used for generation the `pdf_filename`.pdf
-
-            `context` (dict) - The context data to be passed by Django template engine to `pdf_template`
-
-    Examples:
-        Suppose we want to create a view for viewing PDF document inline::
-            >>> from sendpdf.topdf import DownloadPDF
-            >>> class DownloadDemo(DownloadPDF):
-                        pdf_filename = "account_statement"
-                        pdf_template = "account_statement.html"
-                        context = demo_data()
-    """
-    def get(self, request, *args, **kwargs):
-        self.get_pdf()
-        return self.pdfgen.download()
-
-
-class ShowPDF(PDFResponseMixin, View):
-    """
-    The base view for PDF generation and downloading.
-
-    The childs of this object should assign the following values::
-            `pdf_filename` (str) - name of the PDF file to be generated
-
-            `pdf_template` (str) - location of the html template to be used for generation the `pdf_filename`.pdf
-
-            `context` (dict) - The context data to be passed by Django template engine to `pdf_template`
-
-    Examples:
-        Suppose we want to create a view for viewing PDF document inline::
-            >>> from sendpdf.topdf import ShowPDF
-            >>> class ShowDemo(ShowPDF):
-                        pdf_filename = "account_statement"
-                        pdf_template = "account_statement.html"
-                        context = demo_data()
-    """
-    def get(self, request, *args, **kwargs):
-        self.get_pdf()
-        return self.pdfgen.inline()

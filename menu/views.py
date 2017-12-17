@@ -241,8 +241,7 @@ def send(request):
 
     email_ctx = {"week_nb": week.numero_semaine}
     subject="Liste des courses semaine {}".format(week.numero_semaine)
-    s.send_pdf(subject=subject, email_template="menu/mail.html",
-               ctxt=email_ctx, to=("vincentlegoff2004@yahoo.fr",))
+    s.send_pdf(subject=subject, email_template="menu/mail.html", ctxt=email_ctx)
 
 
 def list_ingredients(repass):
@@ -285,7 +284,7 @@ def update_necessary_ingredients(ingredient, necessary_ingredients, recipe_name)
     and add the recipe name to the list
     if not found, it creates a new ingredient and add it to the list
     """
-    print(update_necessary_ingredients)
+    print('update_necessary_ingredients')
     new_ingredient = True
     # go through the list of already identified necessary ingredients
     for necessary_ingredient in necessary_ingredients:
@@ -324,17 +323,11 @@ def menu_modifier(request, form_id):
         # On modifie la semaine avec les donnees recuperees
         formset = repas_form_set(request.POST, queryset=semaine.repas_set.all().order_by('ordre'))
 
-        print("request.POST")
-        print(request.POST)
-
-        print("formset.get_queryset()")
-        print(formset.get_queryset())
-
         if formset.is_valid():
             formset.save()
             print("formset.get_queryset() after save")
             print(formset.get_queryset())
-            #on recupere le repas a changer
+            # on recupere le repas a changer
             repas = semaine.repas_set.get(id=form_id)
 
             # we get an associated list of matching receipts
@@ -344,14 +337,10 @@ def menu_modifier(request, form_id):
                 repas.recette = random.choice(recettes)
             else:
                 repas.recette = None
-            print("nouveau repas")
-            print(repas)
             repas.save()
             formset = repas_form_set(queryset=semaine.repas_set.all().order_by('ordre'))
             return render(request, 'menu/generer_menu.html', {'repas_semaine': semaine, 'formset': formset})
         else:
-            print("forme pas valide")
-            print(formset.errors)
             return render(request, 'menu/generer_menu.html',  {'repas_semaine': semaine, 'formset': formset})
     else:
         print("On ne devrait pas etre ici")
@@ -457,23 +446,18 @@ def selectionner_recette(selection_form):
             query_object.add(Q(saison__in=selection_form.cleaned_data['saisons']) | Q(saison__nom="Indifférent"), Q.AND)
     # On regarde ensuite s'il y a des invites
     if invite_present:
-        print("repas invite")
         requete_vide = False
         query_object.add(Q(OK_invites=True), Q.AND)
 
     # On regarde enfin si des ingredients sont specifies
     if ingredients:
-        print("Il y a des ingredients specifies")
         requete_vide = False
         query_object.add(Q(ingredients__in=selection_form.cleaned_data['ingredients']), Q.AND)
 
     # ici le query_object est pret, on fait donc la query a la base
     if not requete_vide:
-        print("ici")
-        print(query_object)
         recettes = models.Recette.objects.filter(query_object).order_by('nom')
     else:
-        print("la")
         recettes = models.Recette.objects.all().order_by('nom')[::1]
     return recettes
 
