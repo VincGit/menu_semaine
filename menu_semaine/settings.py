@@ -116,14 +116,14 @@ else:
 
 # Email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'production_credentials.production_mail_account'
+EMAIL_HOST = production_credentials.production_mail_account
 EMAIL_PORT = 587
-EMAIL_HOST_PASSWORD = 'production_credentials.production_credentials'
+EMAIL_HOST_PASSWORD = production_credentials.production_mail_password
 EMAIL_HOST_USER = 'vincentlegoff2004@alwaysdata.net'
 DEFAULT_FROM_EMAIL = 'vincentlegoff2004@alwaysdata.net'
 
 if prod:
-    WKTHMLTOPDF_PATH = "/home/vincentlegoff2004/menu/bin"
+    WKTHMLTOPDF_PATH = "/home/vincentlegoff2004/menu/bin/wkhtmltox/bin/wkhtmltopdf"
 else:
     WKTHMLTOPDF_PATH = "/usr/bin/wkhtmltopdf"
 
@@ -149,8 +149,6 @@ STATIC_URL = '/static/'
 if prod:
     STATIC_ROOT = os.path.join(BASE_DIR, "static")
 else:
-    STATICFILES_DIRS = (
-        os.path.join(BASE_DIR, "static"),
-    )
+    STATICFILES_DIRS = os.path.join(BASE_DIR, "static")
 
 
