@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='repas',
             name='recette',
-            field=models.ForeignKey(blank=True, null=True, to='menu.Recette'),
+            field=models.ForeignKey(blank=True, null=True, to='menu.Recette',on_delete=models.DO_NOTHING),
         ),
         migrations.AlterField(
             model_name='semainerempli',

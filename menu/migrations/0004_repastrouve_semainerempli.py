@@ -16,8 +16,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('recette_libre', models.BooleanField(default=False)),
-                ('recette', models.ForeignKey(to='menu.Recette', null=True)),
-                ('repas', models.ForeignKey(to='menu.Repas')),
+                ('recette', models.ForeignKey(to='menu.Recette', null=True,on_delete=models.DO_NOTHING)),
+                ('repas', models.ForeignKey(to='menu.Repas',on_delete=models.DO_NOTHING)),
             ],
         ),
         migrations.CreateModel(

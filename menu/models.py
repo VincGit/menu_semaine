@@ -76,7 +76,8 @@ class ReferenceRepas(models.Model):
 
     Pour chaque saison definit par ReferenceSaison on va definir une semaine
     type. On copiera ces references pour creer les vrais repas"""
-    profil = models.ForeignKey('ReferenceSaison')
+    profil = models.ForeignKey('ReferenceSaison',
+        on_delete=models.DO_NOTHING)
     nom = models.CharField(max_length=70)
     ordre = models.IntegerField(default=0)
     actif = models.BooleanField(default=True)
@@ -103,8 +104,8 @@ class Repas(models.Model):
     invite = models.BooleanField(default=False)
     saison = models.ManyToManyField('Saison', blank=True)
     categorie = models.ManyToManyField('Categorie', blank=True)
-    recette = models.ForeignKey('Recette', null=True, blank=True)
-    semaine = models.ForeignKey('SemaineRempli', null=True)
+    recette = models.ForeignKey('Recette', null=True, blank=True, on_delete=models.DO_NOTHING)
+    semaine = models.ForeignKey('SemaineRempli', null=True, on_delete=models.DO_NOTHING)
     date = models.DateTimeField(auto_now_add=True, verbose_name="Date de création",
                                 auto_now=False)
 
@@ -117,7 +118,7 @@ class Repas(models.Model):
 
 class SemaineRempli(models.Model):
     numero_semaine = models.IntegerField(null=True, blank=True, default=datetime.datetime.now().isocalendar()[1] + 1)
-    profil = models.ForeignKey('ReferenceSaison', null=True)
+    profil = models.ForeignKey('ReferenceSaison', null=True, on_delete=models.DO_NOTHING)
     date = models.DateTimeField(auto_now_add=True, auto_now=False, verbose_name="Date de création")
     purchase_items = models.ManyToManyField('PurchaseItem', verbose_name="Achat", blank=True)
     ingredients = models.ManyToManyField('Ingredient', verbose_name="Ingrédient", blank=True)

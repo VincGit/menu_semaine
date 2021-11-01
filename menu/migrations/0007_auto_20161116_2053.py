@@ -46,12 +46,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='repas',
             name='recette',
-            field=models.OneToOneField(null=True, to='menu.Recette'),
+            field=models.OneToOneField(null=True, to='menu.Recette',on_delete=models.DO_NOTHING),
         ),
         migrations.AddField(
             model_name='repas',
             name='semaine',
-            field=models.ForeignKey(null=True, to='menu.SemaineRempli'),
+            field=models.ForeignKey(null=True, to='menu.SemaineRempli',on_delete=models.DO_NOTHING),
         ),
         migrations.AlterField(
             model_name='semainerempli',
@@ -64,7 +64,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='referencerepas',
             name='profil',
-            field=models.ForeignKey(to='menu.ReferenceSaison'),
+            field=models.ForeignKey(to='menu.ReferenceSaison',on_delete=models.DO_NOTHING),
         ),
         migrations.AddField(
             model_name='referencerepas',

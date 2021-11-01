@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='semainerempli',
             name='profil',
-            field=models.ForeignKey(null=True, to='menu.ReferenceSaison'),
+            field=models.ForeignKey(null=True, to='menu.ReferenceSaison',on_delete=models.DO_NOTHING),
         ),
     ]

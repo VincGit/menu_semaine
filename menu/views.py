@@ -8,7 +8,7 @@ from django.http import HttpResponse
 
 from . import forms
 from . import models
-from . import generatePdf
+#from . import generatePdf
 
 
 def editer_recette(request, id):
@@ -236,12 +236,12 @@ def send(request):
             'no_type_items': no_type_items,
             }
 
-    s = generatePdf.GeneratePDF(template="menu/liste.html")
-    s._make_pdf(ctxt=ctxt)
+    # s = generatePdf.GeneratePDF(template="menu/liste.html")
+    # s._make_pdf(ctxt=ctxt)
 
-    email_ctx = {"week_nb": week.numero_semaine}
-    subject="Liste des courses semaine {}".format(week.numero_semaine)
-    s.send_pdf(subject=subject, email_template="menu/mail.html", ctxt=email_ctx)
+    # email_ctx = {"week_nb": week.numero_semaine}
+    # subject="Liste des courses semaine {}".format(week.numero_semaine)
+    # s.send_pdf(subject=subject, email_template="menu/mail.html", ctxt=email_ctx)
 
 
 def list_ingredients(repass):

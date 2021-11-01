@@ -1,5 +1,6 @@
 #manual addition
 db.sqlite3
+.idea
 menu_semaine/production_credentials.py
 menu/migrations/
 .gitignore

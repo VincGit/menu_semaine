@@ -1,4 +1,4 @@
-from io import StringIO
+""" from io import StringIO
 from django import http
 from django.conf import settings
 from django.views.generic import View
@@ -96,4 +96,4 @@ class GeneratePDF:
 
         email_message.attach(
             filename="{}.pdf".format(self.filename), content=self.pdf, mimetype="application/pdf")
-        email_message.send()
+        email_message.send() """
