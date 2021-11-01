@@ -116,14 +116,15 @@ else:
 
 # Email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = production_credentials.production_mail_account
 EMAIL_PORT = 587
-EMAIL_HOST_PASSWORD = production_credentials.production_mail_password
 EMAIL_HOST_USER = 'vincentlegoff2004@alwaysdata.net'
 DEFAULT_FROM_EMAIL = 'vincentlegoff2004@alwaysdata.net'
-EMAIL_TO_LIST = production_credentials.production_mail_to_list
+
 
 if PROD:
+    EMAIL_HOST = production_credentials.production_mail_account
+    EMAIL_HOST_PASSWORD = production_credentials.production_mail_password
+    EMAIL_TO_LIST = production_credentials.production_mail_to_list
     WKTHMLTOPDF_PATH = "/home/vincentlegoff2004/menu/bin/wkhtmltox/bin/wkhtmltopdf"
 else:
     WKTHMLTOPDF_PATH = "/usr/bin/wkhtmltopdf"
