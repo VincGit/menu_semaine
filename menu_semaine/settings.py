@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-from . import production_credentials
+
 try:
     if os.environ["ENV"] == "local":
         PROD = False
@@ -92,6 +92,7 @@ WSGI_APPLICATION = 'menu_semaine.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 if PROD:
+    from . import production_credentials
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
