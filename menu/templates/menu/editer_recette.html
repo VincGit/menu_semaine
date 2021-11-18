@@ -1,18 +1,10 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 
 {% block contenu %}
 <form action="{% url "editer_recette" id %}" method="post">
     {% csrf_token %}
-    {% for field in form %}
-    <div class="fieldWrapper">
-        {{ field.errors }}
-        <p>{{ field.label_tag }}</p>
-        {{ field }}
-        {% if field.help_text %}
-        <p class="help">{{ field.help_text|safe }}</p>
-        {% endif %}
-    </div>
-    {% endfor %}
-    <input type="submit" value="Submit" />
+    {{form|crispy}}
+    <button type="submit" value="Submit" class="btn btn-primary">Envoyer</button>
 </form>
 {% endblock %}

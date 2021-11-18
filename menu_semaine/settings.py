@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+PROD = False
 
 try:
     if os.environ["ENV"] == "local":
@@ -34,17 +35,20 @@ SECRET_KEY = '8$)i$87l$pz6l!dh8@^f_!$n-vdd9u8dxqj$93#$uqgp#e*%co'
 # SECURITY WARNING: don't run with debug turned on in production!
 if PROD:
     DEBUG = False
+    ALLOWED_HOSTS = ['vincentlegoff2004.alwaysdata.net']
+    EMAIL_HOST = production_credentials.production_mail_account
+    EMAIL_HOST_PASSWORD = production_credentials.production_mail_password
+    EMAIL_TO_LIST = production_credentials.production_mail_to_list
+    WKTHMLTOPDF_PATH = "/home/vincentlegoff2004/menu/bin/wkhtmltox/bin/wkhtmltopdf"
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
 else:
     DEBUG = True
-
-if PROD:
-    ALLOWED_HOSTS = ['vincentlegoff2004.alwaysdata.net']
-else:
     ALLOWED_HOSTS = []
+    WKTHMLTOPDF_PATH = "/usr/bin/wkhtmltopdf"
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 
 # Application definition
-
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -53,6 +57,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'menu',
+    'crispy_forms',
 #    'sendpdf',
 )
 
@@ -86,6 +91,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'menu_semaine.wsgi.application'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 # Database
@@ -121,14 +127,6 @@ EMAIL_HOST_USER = 'vincentlegoff2004@alwaysdata.net'
 DEFAULT_FROM_EMAIL = 'vincentlegoff2004@alwaysdata.net'
 
 
-if PROD:
-    EMAIL_HOST = production_credentials.production_mail_account
-    EMAIL_HOST_PASSWORD = production_credentials.production_mail_password
-    EMAIL_TO_LIST = production_credentials.production_mail_to_list
-    WKTHMLTOPDF_PATH = "/home/vincentlegoff2004/menu/bin/wkhtmltox/bin/wkhtmltopdf"
-else:
-    WKTHMLTOPDF_PATH = "/usr/bin/wkhtmltopdf"
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
@@ -147,11 +145,3 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
-
-
-if PROD:
-    STATIC_ROOT = os.path.join(BASE_DIR, "static")
-else:
-    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
-
-
