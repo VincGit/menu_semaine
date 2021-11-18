@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% block contenu %}
-    <div id="id_detail_recette">
-        <a href="{% url "editer_recette" id %}">Editer la recette</a>
+        <a class="btn btn-primary" href="{% url "editer_recette" id %} role="button">Editer la recette</a>
         <h2>{{ recette.nom }}</h2>
         <p>Catégorie :
         {% for categorie in categories %}
@@ -13,7 +12,7 @@
             {{ saison.nom }}{% if not forloop.last %}, {% endif %}
             {% endfor %}
         </p>
-        <div id="id_detail_recette_textes">
+        <div>
             <h3>Recette</h3>
             <p>{{recette.recette|linebreaks }}</p>
             <h3>Commentaires</h3>
@@ -29,5 +28,4 @@
             {{ ingredient.nom}} </p>
         {% endfor %}
         </p>
-    </div>
 {% endblock %}
