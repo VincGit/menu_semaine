@@ -59,7 +59,7 @@ class SelectionRecette(models.Model):
     categories = models.ManyToManyField('Categorie', verbose_name="Catégories", blank=True)
     saisons = models.ManyToManyField('Saison', blank=True, verbose_name="Saisons")
     ingredients = models.ManyToManyField('Ingredient', blank=True, verbose_name="Ingrédients")
-    invite_present = models.BooleanField(default=False, verbose_name="Invite_present")
+    invite_present = models.BooleanField(default=False, verbose_name="Invités")
 
 
 class ReferenceSaison(models.Model):

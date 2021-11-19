@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block contenu %}
-        <a class="btn btn-primary" href="{% url "editer_recette" id %} role="button">Editer la recette</a>
-        <h2>{{ recette.nom }}</h2>
-        <p>Catégorie :
+        
+        <h2 class="text-center">{{ recette.nom }}</h2>
+        <p class="text-center">Catégorie :
         {% for categorie in categories %}
             {{ categorie.nom }}{% if not forloop.last %}, {% endif %}
         {% endfor %}
         </p>
-        <p>Saison :
+        <p class="text-center">Saison :
 			{% for saison in saisons %}
             {{ saison.nom }}{% if not forloop.last %}, {% endif %}
             {% endfor %}
@@ -28,4 +28,5 @@
             {{ ingredient.nom}} </p>
         {% endfor %}
         </p>
+        <a class="btn btn-primary" href="{% url "editer_recette" id %} role="button">Editer la recette</a>
 {% endblock %}
