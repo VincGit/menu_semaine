@@ -7,28 +7,22 @@
    <title>Mon generateur de menus</title>
 </head>
 
-<body>
+<body class="bg-light">
 	<div class="bg-dark">
 		<div class="container">
 			   <div class="row">
-				<nav class="col navbar navbar-expand-lg navbar-dark">
+				<nav class="col navbar navbar-expand-sm navbar-dark">
 						<a class="navbar-brand" href="{% url "accueil" %}">Accueil</a>
 						<ul class="navbar-nav">
-							<li class="nav-item"><a class="nav-link" href="{% url "liste_recette"%}">Liste des recettes</a></li>
+							<li class="nav-item"><a class="nav-link" href="{% url "liste_recette"%}">Liste des recettes	</a></li>
 							<li class="nav-item"><a class="nav-link" href="{% url "recette_aleatoire"%}">Recette au hasard</a></li>
 							<li class="nav-item"><a class="nav-link" href="{% url "entrer_recette"%}">Nouvelle recette</a></li>
 						</ul>
 				</nav>
-				</div>
 			</div>
-			</div>
-			<div class="container">
-			<div class="jumbotron">
-				<h1>Mon menu de la semaine</h1>
-				<p>(Enfin un vendredi soir devant la télé)</p>
-			 </div>
-	</div >	
-	<div class="container">
+		</div>
+	</div>
+	<div class="container bg-light">
 		<div class="row">
 			<div class="col">
 				{% block contenu %}
