@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 PROD = False
-from . import production_credentials
+
 
 try:
     if os.environ["ENV"] == "local":
@@ -35,6 +35,7 @@ SECRET_KEY = '8$)i$87l$pz6l!dh8@^f_!$n-vdd9u8dxqj$93#$uqgp#e*%co'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 if PROD:
+    from . import production_credentials
     DEBUG = False
     ALLOWED_HOSTS = ['vincentlegoff2004.alwaysdata.net']
     EMAIL_HOST = production_credentials.production_mail_account
